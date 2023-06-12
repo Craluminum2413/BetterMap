@@ -36,7 +36,7 @@ public class RadarCommands : ModSystem
             .WithArgs(parsers.Float("markers opacity"))
             .HandleWith(SetOpacity)
         .EndSubCommand()
-        .BeginSubCommand("marker")
+        .BeginSubCommand("mark")
             .WithArgs(parsers.Word("marker name to hide/show"))
             .HandleWith(HideOrShowMarker)
         .EndSubCommand();
