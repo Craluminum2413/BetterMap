@@ -16,6 +16,22 @@ public static class HardcodedExceptions
     public static EntityMapComponent CreateMapComponentForNeutral(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
     public static EntityMapComponent CreateMapComponentForDefault(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
 
+    public static bool IsHidden(this Entity entity)
+    {
+        var hiddenMarks = entity.Api.ModLoader.GetModSystem<Core>().RadarSetttings.Settings.HiddenMarks;
+
+        if (entity.IsProjectile() && hiddenMarks.Contains("projectile")) return true;
+        else if (entity.IsFish() && hiddenMarks.Contains("fish")) return true;
+        else if (entity.IsBoat() && hiddenMarks.Contains("boat")) return true;
+        else if (entity.IsBug() && hiddenMarks.Contains("bugs")) return true;
+        else if (entity.IsItem() && hiddenMarks.Contains("item")) return true;
+        else if (entity.IsHostile() && hiddenMarks.Contains("hostile")) return true;
+        else if (entity.IsPassive() && hiddenMarks.Contains("passive")) return true;
+        else if (entity.IsNeutral() && hiddenMarks.Contains("neutral")) return true;
+        else if (hiddenMarks.Contains("default")) return true;
+        return false;
+    }
+
     public static bool IsProjectile(this Entity entity) => entity is EntityProjectile or EntityThrownBeenade or EntityThrownStone;
     public static bool IsFish(this Entity entity) => entity is EntityFish;
     public static bool IsBoat(this Entity entity) => entity.Code.ToString().Contains("boat") || entity is EntityBoat;

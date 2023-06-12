@@ -11,8 +11,6 @@ namespace MobsRadar;
 
 public class Core : ModSystem
 {
-    private ICoreClientAPI _capi;
-
     public List<string> AvailableMarks { get; set; }
     public SettingsFile<RadarSettings> RadarSetttings { get; set; } = new(Path.Combine(GamePaths.ModConfig, "MobsRadarConfig.json"));
 
@@ -28,7 +26,6 @@ public class Core : ModSystem
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
-        _capi = api;
 
         var worldMapManager = api.ModLoader.GetModSystem<WorldMapManager>();
         worldMapManager.RegisterMapLayer<MobsRadarMapLayer>("Enemies");

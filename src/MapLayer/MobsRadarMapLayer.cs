@@ -63,6 +63,10 @@ namespace MobsRadar
                 {
                     continue;
                 }
+                if (val.Key.IsHidden())
+                {
+                    continue;
+                }
                 if (IsOutOfRange(capi.World.Player.Entity.Pos, val.Key.Pos))
                 {
                     continue;
