@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -51,16 +54,12 @@ public class Core : ModSystem
             .HandleWith(x => SetRadius(x, EnumRadius.Vertical))
         .EndSubCommand()
         .BeginSubCommand("opacity")
-            .WithArgs(parsers.Float("marker opacity"))
+            .WithArgs(parsers.Float("markers opacity"))
             .HandleWith(SetOpacity)
-        // .EndSubCommand()
-        // .BeginSubCommand("hide")
-        //     .WithArgs(parsers.WordRange("markers blocklist"))
-        //     .HandleWith(FillDisallowlist)
-        // .EndSubCommand()
-        // .BeginSubCommand("show")
-        //     .WithArgs(parsers.WordRange("remove markers from blocklist"))
-        //     .HandleWith(FillAllowlist)
+        .EndSubCommand()
+        .BeginSubCommand("hide")
+            .WithArgs(parsers.Word("marker name to hide/show"))
+            .HandleWith(HideOrShowMarker)
         .EndSubCommand();
 
         api.World.Logger.Event("started 'Mobs Radar' mod");
@@ -75,7 +74,16 @@ public class Core : ModSystem
 
     private TextCommandResult PrintRadarInfo(TextCommandCallingArgs args)
     {
-        return TextCommandResult.Success(Lang.Get("mobsradar:Success.RadarInfo"));
+        var sb = new StringBuilder();
+
+        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.HorizontalRadius", RadarSetttings.Settings.HorizontalRadius.ToString()));
+        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.VerticalRadius", RadarSetttings.Settings.VerticalRadius.ToString()));
+        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.Opacity", RadarSetttings.Settings.Opacity.ToString()));
+        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.AvailableMarks", string.Join(" ", AvailableMarks)));
+        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.VisibleMarks", string.Join(" ", RadarSetttings.Settings.GetActiveMarks(_capi))));
+        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.HiddenMarks", string.Join(" ", RadarSetttings.Settings.HiddenMarks)));
+
+        return TextCommandResult.Success(sb.ToString());
     }
 
     private TextCommandResult SetRadius(TextCommandCallingArgs args, EnumRadius radius)
@@ -110,25 +118,40 @@ public class Core : ModSystem
         return TextCommandResult.Success(Lang.Get("{0} set to {1}", "Opacity", num));
     }
 
-    private TextCommandResult FillDisallowlist(TextCommandCallingArgs args)
+    private TextCommandResult HideOrShowMarker(TextCommandCallingArgs args)
     {
-        var rawArgs = args.RawArgs;
+        string word = args[0].ToString();
+        List<string> availableMarks = AvailableMarks;
+        List<string> hiddenMarks = RadarSetttings.Settings.HiddenMarks;
 
-        return TextCommandResult.Success(Lang.Get("mobsradar:Success.EntitiesNowHidden", rawArgs));
+        if (!string.IsNullOrEmpty(word))
+        {
+            if (availableMarks.Contains(word))
+            {
+                if (!hiddenMarks.Contains(word))
+                {
+                    // Add the word to the hiddenMarks list
+                    hiddenMarks.Add(word);
+                    RadarSetttings.Save();
+                    return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowHidden", word));
+                }
+                else
+                {
+                    // Remove the word from the hiddenMarks list
+                    hiddenMarks.Remove(word);
+                    RadarSetttings.Save();
+                    return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowVisible", word));
+                }
+            }
+            else
+            {
+                // The word is not in the availableMarks list
+                return TextCommandResult.Error(Lang.Get("mobsradar:Error.WordNotAvailable", word));
+            }
+        }
+        else
+        {
+            return TextCommandResult.Deferred;
+        }
     }
-
-    private TextCommandResult FillAllowlist(TextCommandCallingArgs args)
-    {
-        var rawArgs = args.RawArgs;
-
-        return TextCommandResult.Success(Lang.Get("mobsradar:Success.EntitiesNowShown", rawArgs));
-    }
-
-
-    // private TextCommandResult FillAllowlist(TextCommandCallingArgs args)
-    // {
-    //     var rawArgs = args.RawArgs;
-
-    //     return TextCommandResult.Success(Lang.Get("mobsradar:Success.EntitiesNowShown", rawArgs));
-    // }
 }
