@@ -6,6 +6,8 @@ using Vintagestory.API.Common.Entities;
 using Vintagestory.GameContent;
 using MobsRadar.Textures;
 using static MobsRadar.Textures.Textures;
+using System;
+using Vintagestory.Client.NoObf;
 
 namespace MobsRadar
 {
@@ -17,7 +19,6 @@ namespace MobsRadar
 
         public static Dictionary<AssetLocation, EntityMark> EntityCodes = new()
         {
-            { new AssetLocation("game:fox"), new EntityMark { Size = 32, Color = "#ffa500", Texture = null } },
         };
 
         private LoadedTexture fallbackTexture;       // Fallback texture for entities not found in EntityCodes
@@ -64,9 +65,20 @@ namespace MobsRadar
                 {
                     continue;
                 }
+                if (IsOutOfRange(capi.World.Player.Entity.Pos, val.Key.Pos))
+                {
+                    continue;
+                }
 
                 val.Value.Render(mapElem, dt);
             }
+        }
+
+        private bool IsOutOfRange(EntityPos pos1, EntityPos pos2)
+        {
+            int verticalRadius = 20;
+            int verticalRange = Math.Abs(pos2.AsBlockPos.Y - pos1.AsBlockPos.Y);
+            return verticalRange > verticalRadius;
         }
 
         public override void OnMouseMoveClient(MouseEvent args, GuiElementMap mapElem, StringBuilder hoverText)
