@@ -121,37 +121,27 @@ public class Core : ModSystem
     private TextCommandResult HideOrShowMarker(TextCommandCallingArgs args)
     {
         string word = args[0].ToString();
-        List<string> availableMarks = AvailableMarks;
         List<string> hiddenMarks = RadarSetttings.Settings.HiddenMarks;
 
-        if (!string.IsNullOrEmpty(word))
+        if (!string.IsNullOrEmpty(word) && AvailableMarks.Contains(word))
         {
-            if (availableMarks.Contains(word))
+            if (hiddenMarks.Contains(word))
             {
-                if (!hiddenMarks.Contains(word))
-                {
-                    // Add the word to the hiddenMarks list
-                    hiddenMarks.Add(word);
-                    RadarSetttings.Save();
-                    return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowHidden", word));
-                }
-                else
-                {
-                    // Remove the word from the hiddenMarks list
-                    hiddenMarks.Remove(word);
-                    RadarSetttings.Save();
-                    return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowVisible", word));
-                }
+                hiddenMarks.Remove(word);
+                RadarSetttings.Save();
+                return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowVisible", word));
             }
             else
             {
-                // The word is not in the availableMarks list
-                return TextCommandResult.Error(Lang.Get("mobsradar:Error.WordNotAvailable", word));
+                hiddenMarks.Add(word);
+                RadarSetttings.Save();
+                return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowHidden", word));
             }
         }
         else
         {
-            return TextCommandResult.Deferred;
+            return TextCommandResult.Error(Lang.Get("mobsradar:Error.WordNotAvailable", word));
         }
     }
+
 }
