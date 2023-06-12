@@ -82,12 +82,10 @@ public class Core : ModSystem
         switch (radius)
         {
             case EnumRadius.Horizontal:
-                // RadarSettings.HorizontalRadius = num;
                 RadarSetttings.Settings.HorizontalRadius = num;
                 RadarSetttings.Save();
                 return TextCommandResult.Success(Lang.Get("{0} set to {1}", "Horizontal radius", num));
             case EnumRadius.Vertical:
-                // RadarSettings.VerticalRadius = num;
                 RadarSetttings.Settings.VerticalRadius = num;
                 RadarSetttings.Save();
 
@@ -120,9 +118,10 @@ public class Core : ModSystem
     }
 
 
-    // private bool ToggleRadar(KeyCombination t1)
+    // private TextCommandResult FillAllowlist(TextCommandCallingArgs args)
     // {
-    //     // RadarSettings.Enabled = !RadarSettings.Enabled;
-    //     return true;
+    //     var rawArgs = args.RawArgs;
+
+    //     return TextCommandResult.Success(Lang.Get("mobsradar:Success.EntitiesNowShown", rawArgs));
     // }
 }
