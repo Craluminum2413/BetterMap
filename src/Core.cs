@@ -35,7 +35,7 @@ public class Core : ModSystem
 
         var parsers = api.ChatCommands.Parsers;
         api.ChatCommands.Create("mradar")
-        // .WithAdditionalInformation(Lang.Get("mobsradar:Description.Radar"))
+        .WithAlias("radar")
         .BeginSubCommand("info")
             .HandleWith(PrintRadarInfo)
         .EndSubCommand()
