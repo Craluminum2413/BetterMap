@@ -6,7 +6,7 @@
     "RadarInfo.HorizontalRadius": "Horizontal Radius: <font color=\"#99c9f9\">{0}</font>",
     "RadarInfo.VerticalRadius": "Vertical Radius: <font color=\"#99c9f9\">{0}</font>",
     "RadarInfo.Opacity": "Opacity: <font color=\"#99c9f9\">{0}</font>",
-    "Success.MarkerNowHidden": "Marker <font color=\"#99c9f9\">{0}</font> is now hidden",
-    "Success.MarkerNowVisible": "Marker <font color=\"#99c9f9\">{0}</font> is now visible ",
-    "Error.WordNotAvailable": "Marker <font color=\"#99c9f9\">{0}</font> doesn't exist"
+    "Success.MarkerNowHidden": "Marker is now hidden: <font color=\"#99c9f9\">{0}</font>",
+    "Success.MarkerNowVisible": "Marker is now visible: <font color=\"#99c9f9\">{0}</font>",
+    "Error.WordNotAvailable": "Marker doesn't exist: <font color=\"#99c9f9\">{0}</font> "
 }

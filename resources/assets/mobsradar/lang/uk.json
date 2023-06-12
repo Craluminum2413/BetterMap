@@ -1,0 +1,12 @@
+{
+    "Action.ToggleRadar": "Показати/Приховати 'Радар Мобів'",
+    "RadarInfo.AvailableMarks": "Доступні мітки: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.VisibleMarks": "Відображувані мітки: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.HiddenMarks": "Приховані мітки: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.HorizontalRadius": "Горизонтальний радіус: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.VerticalRadius": "Вертикальний радіус: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.Opacity": "Непрозорість: <font color=\"#99c9f9\">{0}</font>",
+    "Success.MarkerNowHidden": "Мітка прихована: <font color=\"#99c9f9\">{0}</font>",
+    "Success.MarkerNowVisible": "Мітка відображена: <font color=\"#99c9f9\">{0}</font>",
+    "Error.WordNotAvailable": "Мітка не існує: <font color=\"#99c9f9\">{0}</font>"
+}

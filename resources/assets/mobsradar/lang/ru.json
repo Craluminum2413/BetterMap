@@ -1,0 +1,12 @@
+{
+    "Action.ToggleRadar": "Показать/Скрыть 'Радар Мобов'",
+    "RadarInfo.AvailableMarks": "Доступные метки: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.VisibleMarks": "Отображаемые метки: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.HiddenMarks": "Скрытые метки: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.HorizontalRadius": "Горизонтальный радиус: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.VerticalRadius": "Вертикальный радиус: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.Opacity": "Непрозрачность: <font color=\"#99c9f9\">{0}</font>",
+    "Success.MarkerNowHidden": "Метка скрыта: <font color=\"#99c9f9\">{0}</font>",
+    "Success.MarkerNowVisible": "Метка отображена: <font color=\"#99c9f9\">{0}</font>",
+    "Error.WordNotAvailable": "Метка не существует: <font color=\"#99c9f9\">{0}</font>"
+}
