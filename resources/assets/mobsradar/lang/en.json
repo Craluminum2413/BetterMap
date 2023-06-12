@@ -1,4 +1,12 @@
 {
     "Action.ToggleRadar": "Show/Hide 'Mobs Radar'",
-    
+    "RadarInfo.AvailableMarks": "Available Markers: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.VisibleMarks": "Shown Markers: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.HiddenMarks": "Hidden Markers: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.HorizontalRadius": "Horizontal Radius: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.VerticalRadius": "Vertical Radius: <font color=\"#99c9f9\">{0}</font>",
+    "RadarInfo.Opacity": "Opacity: <font color=\"#99c9f9\">{0}</font>",
+    "Success.MarkerNowHidden": "Marker <font color=\"#99c9f9\">{0}</font> is now hidden",
+    "Success.MarkerNowVisible": "Marker <font color=\"#99c9f9\">{0}</font> is now visible ",
+    "Error.WordNotAvailable": "Marker <font color=\"#99c9f9\">{0}</font> doesn't exist"
 }
