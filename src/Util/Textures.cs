@@ -14,8 +14,7 @@ public static class Textures
         ctx.SetSourceRGBA(0, 0, 0, 0);
         ctx.Paint();
 
-        // var opacity = capi.ModLoader.GetModSystem<Core>().RadarSetttings.Settings.Opacity;
-        var opacity = 1f;
+        var opacity = capi.ModLoader.GetModSystem<Core>().RadarSetttings.Settings.Opacity;
 
         switch (opacity)
         {
