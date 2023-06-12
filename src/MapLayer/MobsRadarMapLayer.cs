@@ -157,62 +157,15 @@ namespace MobsRadar
         {
             EntityMapComponent mapComponent;
 
-            switch (entity)
-            {
-                case EntityProjectile:
-                case EntityThrownBeenade:
-                case EntityThrownStone:
-                    mapComponent = new EntityMapComponent(capi, projectileTexture, entity);
-                    break;
-
-                case EntityFish:
-                    mapComponent = new EntityMapComponent(capi, fishTexture, entity);
-                    break;
-
-                default:
-                    if (entity.Code.ToString().Contains("boat"))
-                    {
-                        mapComponent = new EntityMapComponent(capi, boatTexture, entity);
-                    }
-                    else if (entity.Code.ToString().Contains("butterfly") || entity.Code.ToString().Contains("grub"))
-                    {
-                        mapComponent = new EntityMapComponent(capi, bugTexture, entity);
-                    }
-                    else if (entity.Code.ToString().Contains("game:item"))
-                    {
-                        mapComponent = new EntityMapComponent(capi, itemTexture, entity);
-                    }
-                    else if (entity.Code.ToString().Contains("bee")
-                        || entity.Code.ToString().Contains("eidolon")
-                        || entity.Code.ToString().Contains("bee")
-                        || entity.Code.ToString().Contains("bell")
-                        || entity.Code.ToString().Contains("locust")
-                        || entity.Code.ToString().Contains("drifter")
-                        || entity.Code.ToString().Contains("wolf")
-                        || entity.Code.ToString().Contains("hyena")
-                        || entity.Code.ToString().Contains("bear"))
-                    {
-                        mapComponent = new EntityMapComponent(capi, hostileTexture, entity);
-                    }
-                    else if (entity.Code.ToString().Contains("hare")
-                        || entity.Code.ToString().Contains("raccoon")
-                        || entity.Code.ToString().Contains("gazelle"))
-                    {
-                        mapComponent = new EntityMapComponent(capi, passiveTexture, entity);
-                    }
-                    else if (entity.Code.ToString().Contains("fox")
-                        || entity.Code.ToString().Contains("sheep")
-                        || entity.Code.ToString().Contains("chicken")
-                        || entity.Code.ToString().Contains("pig"))
-                    {
-                        mapComponent = new EntityMapComponent(capi, neutralTexture, entity);
-                    }
-                    else
-                    {
-                        mapComponent = new EntityMapComponent(capi, fallbackTexture, entity);
-                    }
-                    break;
-            }
+            if (entity.IsProjectile()) mapComponent = capi.CreateMapComponentForProjectile(entity, projectileTexture);
+            else if (entity.IsFish()) mapComponent = capi.CreateMapComponentForFish(entity, fishTexture);
+            else if (entity.IsBoat()) mapComponent = capi.CreateMapComponentForBoat(entity, boatTexture);
+            else if (entity.IsBug()) mapComponent = capi.CreateMapComponentForBug(entity, bugTexture);
+            else if (entity.IsItem()) mapComponent = capi.CreateMapComponentForItem(entity, itemTexture);
+            else if (entity.IsHostile()) mapComponent = capi.CreateMapComponentForHostile(entity, hostileTexture);
+            else if (entity.IsPassive()) mapComponent = capi.CreateMapComponentForPassive(entity, passiveTexture);
+            else if (entity.IsNeutral()) mapComponent = capi.CreateMapComponentForNeutral(entity, neutralTexture);
+            else mapComponent = new EntityMapComponent(capi, fallbackTexture, entity);
 
             MapComps[entity] = mapComponent;
             return mapComponent;
