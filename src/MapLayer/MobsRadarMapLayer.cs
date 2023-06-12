@@ -4,8 +4,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.GameContent;
-using MobsRadar.Textures;
-using static MobsRadar.Textures.Textures;
+using static MobsRadar.Textures;
 using System;
 using Vintagestory.Client.NoObf;
 

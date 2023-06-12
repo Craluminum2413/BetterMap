@@ -2,7 +2,7 @@ using Cairo;
 using Vintagestory.API.Client;
 using Vintagestory.API.MathTools;
 
-namespace MobsRadar.Textures;
+namespace MobsRadar;
 
 public static class Textures
 {
