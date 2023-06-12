@@ -19,7 +19,7 @@ public static class Textures
         switch (opacity)
         {
             case > 0:
-                capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, GetBackgroundOpacity(opacity), GetMainOpacity(color, opacity));
+                capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, ApplyOpacity("#000000", opacity), ApplyOpacity(color, opacity));
                 break;
             default:
                 capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, ColorUtil.Hex2Doubles("#000000"), ColorUtil.Hex2Doubles(color));
@@ -31,15 +31,7 @@ public static class Textures
         return new(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2);
     }
 
-    private static double[] GetBackgroundOpacity(double opacity) => new[]
-    {
-        ColorUtil.Hex2Doubles("#000000")[0],
-        ColorUtil.Hex2Doubles("#000000")[1],
-        ColorUtil.Hex2Doubles("#000000")[2],
-        opacity
-    };
-
-    private static double[] GetMainOpacity(string color, double opacity) => new[]
+    private static double[] ApplyOpacity(string color, double opacity) => new[]
     {
         ColorUtil.Hex2Doubles(color)[0],
         ColorUtil.Hex2Doubles(color)[1],
