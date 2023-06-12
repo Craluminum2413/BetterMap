@@ -12,13 +12,13 @@ namespace MobsRadar
 {
     public class MobsRadarMapLayer : MapLayer
     {
-        public Dictionary<Entity, EntityMapComponent> MapComps = new();
-        public ICoreClientAPI capi;
-        float secondsSinceLastTickUpdate;
+        private readonly Dictionary<Entity, EntityMapComponent> MapComps = new();
+        private readonly ICoreClientAPI capi;
+        private float secondsSinceLastTickUpdate;
 
-        public static Dictionary<AssetLocation, EntityMark> EntityCodes = new()
-        {
-        };
+        private Core GetCore() => capi.ModLoader.GetModSystem<Core>();
+
+        // private static Dictionary<AssetLocation, EntityMark> EntityCodes { get; }
 
         private LoadedTexture fallbackTexture;       // Fallback texture for entities not found in EntityCodes
         private LoadedTexture itemTexture;           // Texture for items
@@ -41,7 +41,7 @@ namespace MobsRadar
             if (capi != null)
             {
                 InitializeTextures();
-                InitializeEntityCodes();
+                // InitializeEntityCodes();
                 capi.Event.OnEntitySpawn += Event_EntitySpawn;
                 capi.Event.OnEntityDespawn += Event_EntityDespawn;
             }
@@ -49,7 +49,7 @@ namespace MobsRadar
 
         public override void OnTick(float dt)
         {
-            if (!RadarSettings.Enabled) return;
+            if (!GetCore().RadarSetttings.Settings.Enabled) return;
 
             secondsSinceLastTickUpdate += dt;
             if (secondsSinceLastTickUpdate < 1) return;
@@ -60,7 +60,7 @@ namespace MobsRadar
 
         public override void Render(GuiElementMap mapElem, float dt)
         {
-            if (!RadarSettings.Enabled) return;
+            if (!GetCore().RadarSetttings.Settings.Enabled) return;
 
             foreach (var val in MapComps)
             {
@@ -81,8 +81,7 @@ namespace MobsRadar
         {
             int horizontalRange = Math.Abs(pos2.XYZInt.X - pos1.XYZInt.X) + Math.Abs(pos2.XYZInt.Z - pos1.XYZInt.Z);
             int verticalRange = Math.Abs(pos2.XYZInt.Y - pos1.XYZInt.Y);
-
-            return horizontalRange > RadarSettings.HorizontalRadius || verticalRange > RadarSettings.VerticalRadius;
+            return horizontalRange > GetCore().GetHorizontalRadius() || verticalRange > GetCore().GetVerticalRadius();
         }
 
         public override void OnMouseMoveClient(MouseEvent args, GuiElementMap mapElem, StringBuilder hoverText)
@@ -139,13 +138,13 @@ namespace MobsRadar
             neutralTexture = capi.NeutralMarkTexture();
         }
 
-        private void InitializeEntityCodes()
-        {
-            foreach (var entityMark in EntityCodes.Values)
-            {
-                entityMark.Texture = capi.MarkTexture(entityMark);
-            }
-        }
+        // private void InitializeEntityCodes()
+        // {
+        //     foreach (var entityMark in EntityCodes.Values)
+        //     {
+        //         entityMark.Texture = capi.MarkTexture(entityMark);
+        //     }
+        // }
 
         private void UpdateMarkers()
         {
@@ -269,11 +268,11 @@ namespace MobsRadar
             passiveTexture?.Dispose();
             passiveTexture = null;
 
-            foreach (var entityMark in EntityCodes.Values)
-            {
-                entityMark.Texture?.Dispose();
-                entityMark.Texture = null;
-            }
+            // foreach (var entityMark in EntityCodes.Values)
+            // {
+            //     entityMark.Texture?.Dispose();
+            //     entityMark.Texture = null;
+            // }
         }
     }
 }
