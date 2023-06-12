@@ -26,8 +26,6 @@ public static class Textures
                 break;
         }
 
-        capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, ColorUtil.Hex2Doubles("#000000"), ColorUtil.Hex2Doubles(color));
-
         return new(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2);
     }
 
