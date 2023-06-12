@@ -49,6 +49,8 @@ namespace MobsRadar
 
         public override void OnTick(float dt)
         {
+            if (!RadarSettings.Enabled) return;
+
             secondsSinceLastTickUpdate += dt;
             if (secondsSinceLastTickUpdate < 1) return;
             secondsSinceLastTickUpdate = 0;
@@ -58,6 +60,8 @@ namespace MobsRadar
 
         public override void Render(GuiElementMap mapElem, float dt)
         {
+            if (!RadarSettings.Enabled) return;
+
             foreach (var val in MapComps)
             {
                 if ((val.Key as EntityPlayer)?.Player != null || val.Key is EntityTrader)
@@ -75,9 +79,10 @@ namespace MobsRadar
 
         private bool IsOutOfRange(EntityPos pos1, EntityPos pos2)
         {
-            int verticalRadius = 20;
-            int verticalRange = Math.Abs(pos2.AsBlockPos.Y - pos1.AsBlockPos.Y);
-            return verticalRange > verticalRadius;
+            int horizontalRange = Math.Abs(pos2.XYZInt.X - pos1.XYZInt.X) + Math.Abs(pos2.XYZInt.Z - pos1.XYZInt.Z);
+            int verticalRange = Math.Abs(pos2.XYZInt.Y - pos1.XYZInt.Y);
+
+            return horizontalRange > RadarSettings.HorizontalRadius || verticalRange > RadarSettings.VerticalRadius;
         }
 
         public override void OnMouseMoveClient(MouseEvent args, GuiElementMap mapElem, StringBuilder hoverText)
