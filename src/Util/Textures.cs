@@ -6,24 +6,47 @@ namespace MobsRadar;
 
 public static class Textures
 {
-    public class EntityMark
-    {
-        public int Size;
-        public string Color; // hex
-        public LoadedTexture Texture;
-    }
-
-    public static LoadedTexture CreateMarkTexture(this ICoreClientAPI capi, int size, string color)
+    private static LoadedTexture CreateMarkTexture(this ICoreClientAPI capi, int size, string color)
     {
         var surface = new ImageSurface(Format.Argb32, size, size);
         var ctx = new Context(surface);
 
         ctx.SetSourceRGBA(0, 0, 0, 0);
         ctx.Paint();
+
+        // var opacity = capi.ModLoader.GetModSystem<Core>().RadarSetttings.Settings.Opacity;
+        var opacity = 1f;
+
+        switch (opacity)
+        {
+            case > 0:
+                capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, GetBackgroundOpacity(opacity), GetMainOpacity(color, opacity));
+                break;
+            default:
+                capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, ColorUtil.Hex2Doubles("#000000"), ColorUtil.Hex2Doubles(color));
+                break;
+        }
+
         capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, ColorUtil.Hex2Doubles("#000000"), ColorUtil.Hex2Doubles(color));
 
         return new(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2);
     }
+
+    private static double[] GetBackgroundOpacity(double opacity) => new[]
+    {
+        ColorUtil.Hex2Doubles("#000000")[0],
+        ColorUtil.Hex2Doubles("#000000")[1],
+        ColorUtil.Hex2Doubles("#000000")[2],
+        opacity
+    };
+
+    private static double[] GetMainOpacity(string color, double opacity) => new[]
+    {
+        ColorUtil.Hex2Doubles(color)[0],
+        ColorUtil.Hex2Doubles(color)[1],
+        ColorUtil.Hex2Doubles(color)[2],
+        opacity
+    };
 
     public static LoadedTexture MarkTexture(this ICoreClientAPI capi, EntityMark entityMark) => capi.CreateMarkTexture(entityMark.Size, entityMark.Color);
     public static LoadedTexture DefaultMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(28, "#777777");
