@@ -100,6 +100,11 @@ public class Core : ModSystem
         var num = (float)args.LastArg;
         RadarSetttings.Settings.Opacity = num;
         RadarSetttings.Save();
+
+        var worldMapManager = _capi.ModLoader.GetModSystem<WorldMapManager>();
+        var mobsRadarMapLayer = (MobsRadarMapLayer)worldMapManager.MapLayers.Single(p => p is MobsRadarMapLayer);
+        mobsRadarMapLayer.InitializeTextures();
+
         return TextCommandResult.Success(Lang.Get("{0} set to {1}", "Opacity", num));
     }
 

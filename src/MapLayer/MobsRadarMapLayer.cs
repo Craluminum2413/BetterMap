@@ -120,7 +120,7 @@ namespace MobsRadar
             }
         }
 
-        private void InitializeTextures()
+        public void InitializeTextures()
         {
             fallbackTexture = capi.DefaultMarkTexture();
             projectileTexture = capi.ProjectileMarkTexture();
@@ -135,10 +135,6 @@ namespace MobsRadar
 
         private void UpdateMarkers()
         {
-            DisposeTextures(); // Dispose existing textures
-
-            InitializeTextures(); // Initialize the textures again
-
             foreach (var entity in capi.World.LoadedEntities.Values)
             {
                 if (MapComps.TryGetValue(entity, out var mapComponent))
