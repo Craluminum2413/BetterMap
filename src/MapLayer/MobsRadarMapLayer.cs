@@ -16,8 +16,6 @@ namespace MobsRadar
 
         private Core GetCore() => capi.ModLoader.GetModSystem<Core>();
 
-        // private static Dictionary<AssetLocation, EntityMark> EntityCodes { get; }
-
         private LoadedTexture fallbackTexture;       // Fallback texture for entities not found in EntityCodes
         private LoadedTexture itemTexture;           // Texture for items
         private LoadedTexture projectileTexture;     // Texture for projectiles
@@ -39,7 +37,6 @@ namespace MobsRadar
             if (capi != null)
             {
                 InitializeTextures();
-                // InitializeEntityCodes();
                 capi.Event.OnEntitySpawn += Event_EntitySpawn;
                 capi.Event.OnEntityDespawn += Event_EntityDespawn;
             }
@@ -136,14 +133,6 @@ namespace MobsRadar
             neutralTexture = capi.NeutralMarkTexture();
         }
 
-        // private void InitializeEntityCodes()
-        // {
-        //     foreach (var entityMark in EntityCodes.Values)
-        //     {
-        //         entityMark.Texture = capi.MarkTexture(entityMark);
-        //     }
-        // }
-
         private void UpdateMarkers()
         {
             foreach (var entity in capi.World.LoadedEntities.Values)
@@ -220,7 +209,6 @@ namespace MobsRadar
                     }
                     else
                     {
-                        // Entity code not found, use fallback texture
                         mapComponent = new EntityMapComponent(capi, fallbackTexture, entity);
                     }
                     break;
@@ -268,12 +256,6 @@ namespace MobsRadar
 
             passiveTexture?.Dispose();
             passiveTexture = null;
-
-            // foreach (var entityMark in EntityCodes.Values)
-            // {
-            //     entityMark.Texture?.Dispose();
-            //     entityMark.Texture = null;
-            // }
         }
     }
 }
