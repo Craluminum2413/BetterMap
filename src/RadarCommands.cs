@@ -189,8 +189,11 @@ public class RadarCommands : ModSystem
             {
                 var markColor = visibleMarks.Contains(marker.Key) ? "#4dffa6" : hiddenMarks.Contains(marker.Key) ? "#ff4d4d" : "";
 
-                var coloredMarkText = $"[ {marker.Key.ApplyColorToText(markColor)} | {markers[marker.Key].Size} | {markers[marker.Key].Color.GetSelfColoredText()} ]";
-                sb.Append(coloredMarkText);
+                sb.Append(Lang.Get(
+                    "mobsradar:Radar.MarkerNameSizeColorFormat",
+                    marker.Key.ApplyColorToText(markColor),
+                    markers[marker.Key].Size,
+                    markers[marker.Key].Color.GetSelfColoredText()));
 
                 count++;
                 if (count % 3 == 0)
