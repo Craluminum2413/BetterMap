@@ -1,3 +1,4 @@
+using System;
 using Cairo;
 using Vintagestory.API.Client;
 using Vintagestory.API.MathTools;
@@ -26,7 +27,16 @@ public static class Textures
                 break;
         }
 
-        return new(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2);
+        // Create a new surface and context for rotation
+        var rotatedSurface = new ImageSurface(Format.Argb32, size, size);
+        var rotatedCtx = new Context(rotatedSurface);
+
+        // Rotate the original surface by 90 degrees
+        rotatedCtx.Rotate(Math.PI / 2); // 90 degrees in radians
+        rotatedCtx.SetSourceSurface(surface, 0, -size);
+        rotatedCtx.Paint();
+
+        return new LoadedTexture(capi, capi.Gui.LoadCairoTexture(rotatedSurface, false), size / 2, size / 2);
     }
 
     private static double[] ApplyOpacity(string color, double opacity) => new[]
