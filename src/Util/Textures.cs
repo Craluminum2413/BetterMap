@@ -14,7 +14,7 @@ public static class Textures
         ctx.SetSourceRGBA(0, 0, 0, 0);
         ctx.Paint();
 
-        var opacity = capi.ModLoader.GetModSystem<Core>().RadarSetttings.Settings.Opacity;
+        var opacity = GetSettings(capi).Opacity;
 
         switch (opacity)
         {
@@ -38,15 +38,16 @@ public static class Textures
     };
 
     public static LoadedTexture MarkTexture(this ICoreClientAPI capi, EntityMark entityMark) => capi.CreateMarkTexture(entityMark.Size, entityMark.Color);
-    public static LoadedTexture DefaultMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(28, "#777777");
 
-    public static LoadedTexture HostileMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(28, "#FF0000");
-    public static LoadedTexture NeutralMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(28, "#ffa500");
-    public static LoadedTexture PassiveMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(28, "#00FF00");
+    public static LoadedTexture BoatMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["boat"].Size, GetSettings(capi).Markers["boat"].Color);
+    public static LoadedTexture BugMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["bugs"].Size, GetSettings(capi).Markers["bugs"].Color);
+    public static LoadedTexture DefaultMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["default"].Size, GetSettings(capi).Markers["default"].Color);
+    public static LoadedTexture FishMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["fish"].Size, GetSettings(capi).Markers["fish"].Color);
+    public static LoadedTexture HostileMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["hostile"].Size, GetSettings(capi).Markers["hostile"].Color);
+    public static LoadedTexture ItemMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["item"].Size, GetSettings(capi).Markers["item"].Color);
+    public static LoadedTexture NeutralMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["neutral"].Size, GetSettings(capi).Markers["neutral"].Color);
+    public static LoadedTexture PassiveMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["passive"].Size, GetSettings(capi).Markers["passive"].Color);
+    public static LoadedTexture ProjectileMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["projectile"].Size, GetSettings(capi).Markers["projectile"].Color);
 
-    public static LoadedTexture ProjectileMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(24, "#00FFFF");
-    public static LoadedTexture FishMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(28, "#add8e6");
-    public static LoadedTexture BoatMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(28, "#00AAFF");
-    public static LoadedTexture BugMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(24, "#777777");
-    public static LoadedTexture ItemMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(24, "#FF99FF");
+    public static RadarSettings GetSettings(ICoreClientAPI capi) => capi.ModLoader.GetModSystem<Core>().RadarSetttings.Settings;
 }

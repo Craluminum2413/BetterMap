@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Vintagestory.API.Client;
@@ -39,6 +40,14 @@ public class RadarCommands : ModSystem
         .BeginSubCommand("mark")
             .WithArgs(parsers.Word("marker name to hide/show"))
             .HandleWith(HideOrShowMarker)
+        .EndSubCommand()
+        .BeginSubCommand("size")
+            .WithArgs(parsers.Word("marker name"), parsers.Int("size"))
+            .HandleWith(SetMarkerSize)
+        .EndSubCommand()
+        .BeginSubCommand("color")
+            .WithArgs(parsers.Word("marker name"), parsers.Word("color"))
+            .HandleWith(SetMarkerColor)
         .EndSubCommand();
     }
 
@@ -46,12 +55,16 @@ public class RadarCommands : ModSystem
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.HorizontalRadius", GetCore().RadarSetttings.Settings.HorizontalRadius.ToString()));
-        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.VerticalRadius", GetCore().RadarSetttings.Settings.VerticalRadius.ToString()));
-        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.Opacity", GetCore().RadarSetttings.Settings.Opacity.ToString()));
-        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.AvailableMarks", string.Join(" ", GetCore().AvailableMarks)));
-        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.VisibleMarks", string.Join(" ", GetCore().RadarSetttings.Settings.GetActiveMarks(_capi))));
-        sb.AppendLine(Lang.Get("mobsradar:RadarInfo.HiddenMarks", string.Join(" ", GetCore().RadarSetttings.Settings.HiddenMarks)));
+        sb.AppendLine(Lang.Get(
+            "mobsradar:Radar.Radius0",
+            Lang.Get("mobsradar:Horizontal"),
+            Lang.Get("mobsradar:Vertical"),
+            GetCore().RadarSetttings.Settings.HorizontalRadius.ColorLightBlue(),
+            GetCore().RadarSetttings.Settings.VerticalRadius.ColorLightBlue()));
+
+        sb.AppendLine(Lang.Get("mobsradar:Radar.Opacity0", GetCore().RadarSetttings.Settings.Opacity.ColorLightBlue()));
+
+        PrintMarkerSizeColor(sb);
 
         return TextCommandResult.Success(sb.ToString());
     }
@@ -60,16 +73,19 @@ public class RadarCommands : ModSystem
     {
         var num = (int)args[0];
 
+        var horizontalText = Lang.Get("mobsradar:Horizontal");
+        var verticalText = Lang.Get("mobsradar:Vertical");
+
         switch (radius)
         {
             case EnumRadius.Horizontal:
                 GetCore().RadarSetttings.Settings.HorizontalRadius = num;
                 GetCore().RadarSetttings.Save();
-                return TextCommandResult.Success(Lang.Get("{0} set to {1}", "Horizontal radius", num));
+                return TextCommandResult.Success(Lang.Get("mobsradar:Success.RadiusSet", horizontalText, num.ColorLightBlue()));
             case EnumRadius.Vertical:
                 GetCore().RadarSetttings.Settings.VerticalRadius = num;
                 GetCore().RadarSetttings.Save();
-                return TextCommandResult.Success(Lang.Get("{0} set to {1}", "Vertical radius", num));
+                return TextCommandResult.Success(Lang.Get("mobsradar:Success.RadiusSet", verticalText, num.ColorLightBlue()));
             default:
                 return TextCommandResult.Deferred;
         }
@@ -80,12 +96,55 @@ public class RadarCommands : ModSystem
         var num = (float)args.LastArg;
         GetCore().RadarSetttings.Settings.Opacity = num;
         GetCore().RadarSetttings.Save();
+        InitializeTextures();
+        return TextCommandResult.Success(Lang.Get("mobsradar:Success.OpacitySet", num.ColorLightBlue()));
+    }
 
-        var worldMapManager = _capi.ModLoader.GetModSystem<WorldMapManager>();
-        var mobsRadarMapLayer = (MobsRadarMapLayer)worldMapManager.MapLayers.Single(p => p is MobsRadarMapLayer);
-        mobsRadarMapLayer.InitializeTextures();
+    private TextCommandResult SetMarkerSize(TextCommandCallingArgs args)
+    {
+        var name = args[0].ToString();
+        var size = (int)args[1];
 
-        return TextCommandResult.Success(Lang.Get("{0} set to {1}", "Opacity", num));
+        if (!GetCore().AvailableMarks.Contains(name))
+        {
+            return TextCommandResult.Error(Lang.Get("mobsradar:Error.WordNotAvailable", name.ColorLightBlue()));
+        }
+
+        GetCore().RadarSetttings.Settings.Markers[name].Size = size;
+        GetCore().RadarSetttings.Save();
+        InitializeTextures();
+        return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerSizeSet", name.ColorLightBlue(), size.ColorLightBlue()));
+    }
+
+    private TextCommandResult SetMarkerColor(TextCommandCallingArgs args)
+    {
+        var name = args[0].ToString();
+        var color = args[1].ToString();
+
+        if (color.Contains('#')) color = color.Replace("#", "");
+
+        if (!GetCore().AvailableMarks.Contains(name))
+        {
+            return TextCommandResult.Error(Lang.Get("mobsradar:Error.WordNotAvailable", name));
+        }
+
+        bool isValidHex = int.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _);
+
+        if (!isValidHex)
+        {
+            return TextCommandResult.Error(Lang.Get("mobsradar:Error.NotValidHex", color));
+        }
+
+        color = color.Insert(0, "#");
+
+        GetCore().RadarSetttings.Settings.Markers[name].Color = color;
+        GetCore().RadarSetttings.Save();
+        InitializeTextures();
+
+        var sb = new StringBuilder();
+        sb.AppendFormat(Lang.Get("mobsradar:Success.MarkerColorSet", name.ColorLightBlue(), color.GetSelfColoredText())).AppendLine();
+
+        return TextCommandResult.Success();
     }
 
     private TextCommandResult HideOrShowMarker(TextCommandCallingArgs args)
@@ -99,18 +158,53 @@ public class RadarCommands : ModSystem
             {
                 hiddenMarks.Remove(word);
                 GetCore().RadarSetttings.Save();
-                return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowVisible", word));
+                return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowVisible", word.ColorLightBlue()));
             }
             else
             {
                 hiddenMarks.Add(word);
                 GetCore().RadarSetttings.Save();
-                return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowHidden", word));
+                return TextCommandResult.Success(Lang.Get("mobsradar:Success.MarkerNowHidden", word.ColorLightBlue()));
             }
         }
         else
         {
-            return TextCommandResult.Error(Lang.Get("mobsradar:Error.WordNotAvailable", word));
+            return TextCommandResult.Error(Lang.Get("mobsradar:Error.WordNotAvailable", word.ColorLightBlue()));
         }
+    }
+
+    private void PrintMarkerSizeColor(StringBuilder sb)
+    {
+        sb.AppendLine(Lang.Get("mobsradar:Radar.MarkersNameSizeColor"));
+        var markers = GetCore().RadarSetttings.Settings.Markers;
+        var sortedMarkers = markers.OrderBy(x => x.Key).ToList();
+
+        var visibleMarks = GetCore().RadarSetttings.Settings.GetActiveMarks(_capi);
+        var hiddenMarks = GetCore().RadarSetttings.Settings.HiddenMarks;
+
+        int count = 0;
+        foreach (var marker in sortedMarkers)
+        {
+            if (marker.Key != null && markers.ContainsKey(marker.Key))
+            {
+                var markColor = visibleMarks.Contains(marker.Key) ? "#4dffa6" : hiddenMarks.Contains(marker.Key) ? "#ff4d4d" : "";
+
+                var coloredMarkText = $"[ {marker.Key.ApplyColorToText(markColor)} | {markers[marker.Key].Size} | {markers[marker.Key].Color.GetSelfColoredText()} ]";
+                sb.Append(coloredMarkText);
+
+                count++;
+                if (count % 3 == 0)
+                    sb.AppendLine();
+                else
+                    sb.Append("\t\t");
+            }
+        }
+    }
+
+    private void InitializeTextures()
+    {
+        var worldMapManager = _capi.ModLoader.GetModSystem<WorldMapManager>();
+        var mobsRadarMapLayer = (MobsRadarMapLayer)worldMapManager.MapLayers.Single(p => p is MobsRadarMapLayer);
+        mobsRadarMapLayer.InitializeTextures();
     }
 }

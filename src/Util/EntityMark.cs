@@ -6,5 +6,5 @@ public class EntityMark
 {
     public int Size { get; set; }
     public string Color { get; set; } // hex
-    public LoadedTexture Texture { get; set; }
+    // public LoadedTexture Texture { get; set; }
 }
