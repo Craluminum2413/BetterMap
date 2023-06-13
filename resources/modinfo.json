@@ -6,5 +6,5 @@
     "description": "Detects creatures and adds markers for them on both world map and minimap.\n\t- Hostile are red.\n\t- Neutral are orange.\n\t- Passive are green.",
     "authors": ["Craluminum2413"],
     "contributors": ["Apache"],
-    "version": "1.0.1"
+    "version": "1.0.2"
 }
