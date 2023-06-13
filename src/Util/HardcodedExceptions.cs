@@ -21,15 +21,15 @@ public static class HardcodedExceptions
         return horizontalRange > core.GetHorizontalRadius() || verticalRange > core.GetVerticalRadius();
     }
 
-    public static EntityMapComponent CreateMapComponentForProjectile(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static EntityMapComponent CreateMapComponentForFish(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static EntityMapComponent CreateMapComponentForBoat(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static EntityMapComponent CreateMapComponentForBug(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static EntityMapComponent CreateMapComponentForItem(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static EntityMapComponent CreateMapComponentForHostile(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static EntityMapComponent CreateMapComponentForPassive(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static EntityMapComponent CreateMapComponentForNeutral(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static EntityMapComponent CreateMapComponentForDefault(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForProjectile(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForFish(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForBoat(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForBug(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForItem(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForHostile(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForPassive(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForNeutral(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForDefault(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
 
     public static bool IsHidden(this Entity entity)
     {

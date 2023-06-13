@@ -10,7 +10,7 @@ namespace MobsRadar
 {
     public class MobsRadarMapLayer : MapLayer
     {
-        private readonly Dictionary<Entity, EntityMapComponent> MapComps = new();
+        private readonly Dictionary<Entity, RadarMapComponent> MapComps = new();
         private readonly ICoreClientAPI capi;
         private float secondsSinceLastTickUpdate;
 
@@ -140,9 +140,9 @@ namespace MobsRadar
             }
         }
 
-        private EntityMapComponent CreateEntityMapComponent(Entity entity)
+        private RadarMapComponent CreateEntityMapComponent(Entity entity)
         {
-            EntityMapComponent mapComponent;
+            RadarMapComponent mapComponent;
 
             if (entity.IsProjectile()) mapComponent = capi.CreateMapComponentForProjectile(entity, projectileTexture);
             else if (entity.IsFish()) mapComponent = capi.CreateMapComponentForFish(entity, fishTexture);
@@ -152,7 +152,7 @@ namespace MobsRadar
             else if (entity.IsHostile()) mapComponent = capi.CreateMapComponentForHostile(entity, hostileTexture);
             else if (entity.IsPassive()) mapComponent = capi.CreateMapComponentForPassive(entity, passiveTexture);
             else if (entity.IsNeutral()) mapComponent = capi.CreateMapComponentForNeutral(entity, neutralTexture);
-            else mapComponent = new EntityMapComponent(capi, fallbackTexture, entity);
+            else mapComponent = new(capi, fallbackTexture, entity);
 
             MapComps[entity] = mapComponent;
             return mapComponent;
