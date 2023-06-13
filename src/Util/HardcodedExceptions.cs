@@ -1,4 +1,6 @@
+using System;
 using Vintagestory.API.Client;
+using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.GameContent;
 
@@ -6,6 +8,19 @@ namespace MobsRadar;
 
 public static class HardcodedExceptions
 {
+    public static bool IsExcluded(this ICoreClientAPI capi, Entity entity) => entity is EntityPlayer { Player: not null }
+        || entity is EntityTrader
+        || entity.IsHidden()
+        || IsOutOfRange(capi, capi.World.Player.Entity.Pos, entity.Pos);
+
+    public static bool IsOutOfRange(this ICoreClientAPI capi, EntityPos pos1, EntityPos pos2)
+    {
+        var core = capi.ModLoader.GetModSystem<Core>();
+        int horizontalRange = Math.Abs(pos2.XYZInt.X - pos1.XYZInt.X) + Math.Abs(pos2.XYZInt.Z - pos1.XYZInt.Z);
+        int verticalRange = Math.Abs(pos2.XYZInt.Y - pos1.XYZInt.Y);
+        return horizontalRange > core.GetHorizontalRadius() || verticalRange > core.GetVerticalRadius();
+    }
+
     public static EntityMapComponent CreateMapComponentForProjectile(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
     public static EntityMapComponent CreateMapComponentForFish(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
     public static EntityMapComponent CreateMapComponentForBoat(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);

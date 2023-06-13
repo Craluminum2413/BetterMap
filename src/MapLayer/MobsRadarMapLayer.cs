@@ -59,34 +59,16 @@ namespace MobsRadar
 
             foreach (var val in MapComps)
             {
-                if ((val.Key as EntityPlayer)?.Player != null || val.Key is EntityTrader)
-                {
-                    continue;
-                }
-                if (val.Key.IsHidden())
-                {
-                    continue;
-                }
-                if (IsOutOfRange(capi.World.Player.Entity.Pos, val.Key.Pos))
-                {
-                    continue;
-                }
-
+                if (capi.IsExcluded(val.Key)) continue;
                 val.Value.Render(mapElem, dt);
             }
-        }
-
-        private bool IsOutOfRange(EntityPos pos1, EntityPos pos2)
-        {
-            int horizontalRange = Math.Abs(pos2.XYZInt.X - pos1.XYZInt.X) + Math.Abs(pos2.XYZInt.Z - pos1.XYZInt.Z);
-            int verticalRange = Math.Abs(pos2.XYZInt.Y - pos1.XYZInt.Y);
-            return horizontalRange > GetCore().GetHorizontalRadius() || verticalRange > GetCore().GetVerticalRadius();
         }
 
         public override void OnMouseMoveClient(MouseEvent args, GuiElementMap mapElem, StringBuilder hoverText)
         {
             foreach (var val in MapComps)
             {
+                if (capi.IsExcluded(val.Key)) continue;
                 val.Value.OnMouseMove(args, mapElem, hoverText);
             }
         }
@@ -95,6 +77,7 @@ namespace MobsRadar
         {
             foreach (var val in MapComps)
             {
+                if (capi.IsExcluded(val.Key)) continue;
                 val.Value.OnMouseUpOnElement(args, mapElem);
             }
         }
