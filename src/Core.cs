@@ -28,7 +28,7 @@ public class Core : ModSystem
         base.StartClientSide(api);
 
         var worldMapManager = api.ModLoader.GetModSystem<WorldMapManager>();
-        worldMapManager.RegisterMapLayer<MobsRadarMapLayer>("Enemies");
+        worldMapManager.RegisterMapLayer<MobsRadarMapLayer>("MobsRadar");
 
         api.World.Logger.Event("started 'Mobs Radar' mod");
     }
