@@ -1,6 +1,6 @@
-using System;
 using System.IO;
 using Newtonsoft.Json;
+using Vintagestory.API.Config;
 
 namespace MobsRadar;
 
@@ -11,6 +11,14 @@ public class SettingsFile<TSettings> where TSettings : new()
     public SettingsFile(string filePath)
     {
         _file = new FileInfo(filePath);
+
+        if (!Directory.Exists(GamePaths.ModConfig))
+        {
+            Directory.CreateDirectory(GamePaths.ModConfig);
+            Save();
+            return;
+        }
+
         if (!_file.Exists)
         {
             Save();
