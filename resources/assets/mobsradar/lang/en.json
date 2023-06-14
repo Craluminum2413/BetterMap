@@ -2,8 +2,8 @@
     "Action.ToggleRadar": "Show/Hide 'Mobs Radar'",
     "Color.LightBlue": "<font color=\"#99c9f9\">{0}</font>",
     "SelfColoredText": "<font color=\"{0}\">{0}</font>",
-    "Radar.MarkersNameSizeColor": "Markers: [ Name | Size | Color ]",
-    "Radar.MarkerNameSizeColorFormat": "[ {0} | {1} | {2} ]",
+    "Radar.MarkersNameSizeColor": "<font family=\"Consolas\">Markers: [ Name | Size | Color ]</font>",
+    "Radar.MarkerNameSizeColorFormat": "<font family=\"Consolas\">[ {0} | {1} | {2} ]</font>",
     "Error.WordNotAvailable": "Marker doesn't exist: {0}",
     "Error.NotValidHex": "Not valid hex: {0}",
     "Success.MarkerNowHidden": "({0}) Marker hidden",
@@ -14,8 +14,8 @@
     "Success.OpacitySet": "Opacity set to {0}",
     "Vertical": "Vertical",
     "Horizontal": "Horizontal",
-    "Radar.Opacity0": "Opacity: {0}",
+    "Radar.Opacity0": "<font family=\"Consolas\">Opacity: {0}</font>",
     "Radar.Opacity": "Opacity",
-    "Radar.Radius0": "Radius: {0} / {1}: {2} / {3}",
+    "Radar.Radius0": "<font family=\"Consolas\">Radius: {0} / {1}: {2} / {3}</font>",
     "Radar.Radius": "Radius"
 }
