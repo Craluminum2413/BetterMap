@@ -30,6 +30,8 @@ namespace MobsRadar
         public override string Title => "MobsRadar";
         public override EnumMapAppSide DataSide => EnumMapAppSide.Client;
 
+        public override string LayerGroupCode => "creatures";
+
         public MobsRadarMapLayer(ICoreAPI api, IWorldMapManager mapSink) : base(api, mapSink) => capi = api as ICoreClientAPI;
 
         public override void OnLoaded()
