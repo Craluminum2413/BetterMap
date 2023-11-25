@@ -59,15 +59,15 @@ public class MobsRadar : ModSystem
 
     private static Dictionary<EnumEntityCategory, ConfigEntityMark> DefaultConfig => new Dictionary<EnumEntityCategory, ConfigEntityMark>()
     {
-        [EnumEntityCategory.boat] = new() { Size = 28, Color = "#00AAFF", Visible = true },
-        [EnumEntityCategory.bugs] = new() { Size = 24, Color = "#777777", Visible = true },
-        [EnumEntityCategory.other] = new() { Size = 28, Color = "#777777", Visible = true },
-        [EnumEntityCategory.fish] = new() { Size = 28, Color = "#add8e6", Visible = true },
-        [EnumEntityCategory.hostile] = new() { Size = 28, Color = "#FF0000", Visible = true },
-        [EnumEntityCategory.item] = new() { Size = 24, Color = "#FF99FF", Visible = true },
-        [EnumEntityCategory.pet] = new() { Size = 28, Color = "#008000", Visible = true },
-        [EnumEntityCategory.neutral] = new() { Size = 28, Color = "#ffa500", Visible = true },
-        [EnumEntityCategory.passive] = new() { Size = 28, Color = "#00FF00", Visible = true },
-        [EnumEntityCategory.projectile] = new() { Size = 24, Color = "#00FFFF", Visible = true },
+        [EnumEntityCategory.boat] = new() { Size = 28, Color = "#00AAFF", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
+        [EnumEntityCategory.bugs] = new() { Size = 24, Color = "#777777", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
+        [EnumEntityCategory.other] = new() { Size = 28, Color = "#777777", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
+        [EnumEntityCategory.fish] = new() { Size = 28, Color = "#add8e6", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
+        [EnumEntityCategory.hostile] = new() { Size = 28, Color = "#FF0000", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
+        [EnumEntityCategory.item] = new() { Size = 24, Color = "#FF99FF", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
+        [EnumEntityCategory.pet] = new() { Size = 28, Color = "#008000", Visible = true, maxHorizontalDistance = 1000, maxVerticalDistance = 100 },
+        [EnumEntityCategory.neutral] = new() { Size = 28, Color = "#ffa500", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
+        [EnumEntityCategory.passive] = new() { Size = 28, Color = "#00FF00", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
+        [EnumEntityCategory.projectile] = new() { Size = 24, Color = "#00FFFF", Visible = true, maxHorizontalDistance = 100, maxVerticalDistance = 10 },
     };
 }

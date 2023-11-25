@@ -54,7 +54,7 @@ namespace MobsRadar
             if (entity is EntityPlayer) return;
 
             var loadedMarker = loadedEntityMarkers[EntityCategorizer.GetEntityCategory(entity, capi)];
-            if (mapSink.IsOpened && !MapComps.ContainsKey(entity.EntityId) && loadedMarker.Visible)
+            if (mapSink.IsOpened && !MapComps.ContainsKey(entity.EntityId) && loadedMarker.ShouldBeRendered(entity, capi))
             {
                 RadarMapComponent cmp = new RadarMapComponent(capi, loadedMarker.texture, entity, entity.Properties.Color);
                 MapComps[entity.EntityId] = cmp;
@@ -73,7 +73,6 @@ namespace MobsRadar
                 foreach (var category in Enum.GetValues<EnumEntityCategory>())
                 {
                     var marker = markerConfig[category];
-                    capi.Logger.Debug(string.Format("type: {0}, visibility: {1}", category, marker.Visible));
                     int size = (int)GuiElement.scaled(marker.Size);
                     ImageSurface surface = new ImageSurface(Format.Argb32, size, size);
                     Context ctx = new Context(surface);
@@ -83,7 +82,9 @@ namespace MobsRadar
                     loadedEntityMarkers.Add(category, new LoadedEntityMark()
                     {
                         Visible = marker.Visible,
-                        texture = new LoadedTexture(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2)
+                        texture = new LoadedTexture(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2),
+                        maxHorizontalDistance = marker.maxHorizontalDistance,
+                        maxVerticalDistance = marker.maxVerticalDistance
                     });
                     ctx.Dispose();
                     surface.Dispose();
@@ -105,7 +106,7 @@ namespace MobsRadar
                 }
 
                 var loadedMarker = loadedEntityMarkers[EntityCategorizer.GetEntityCategory(val.Value, capi)];
-                if (loadedMarker.Visible)
+                if (loadedMarker.ShouldBeRendered(val.Value, capi))
                 {
                     cmp = new RadarMapComponent(capi, loadedMarker.texture, val.Value, val.Value.Properties.Color);
                     MapComps[val.Value.EntityId] = cmp;
