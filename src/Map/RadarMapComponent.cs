@@ -10,7 +10,7 @@ namespace MobsRadar
 {
     public class RadarMapComponent : EntityMapComponent
     {
-        public RadarMapComponent(ICoreClientAPI capi, LoadedTexture texture, Entity entity) : base(capi, texture, entity)
+        public RadarMapComponent(ICoreClientAPI capi, LoadedTexture texture, Entity entity, string color = null) : base(capi, texture, entity, color)
         {
         }
 
