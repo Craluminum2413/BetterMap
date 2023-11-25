@@ -20,6 +20,7 @@ public class RadarSettings
         ["fish"] = new() { Size = 28, Color = "#add8e6" },
         ["hostile"] = new() { Size = 28, Color = "#FF0000" },
         ["item"] = new() { Size = 24, Color = "#FF99FF" },
+        ["pet"] = new() { Size = 28, Color = "#008000" },
         ["neutral"] = new() { Size = 28, Color = "#ffa500" },
         ["passive"] = new() { Size = 28, Color = "#00FF00" },
         ["projectile"] = new() { Size = 24, Color = "#00FFFF" },

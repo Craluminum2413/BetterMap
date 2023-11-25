@@ -26,6 +26,7 @@ public static class HardcodedExceptions
     public static RadarMapComponent CreateMapComponentForBoat(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
     public static RadarMapComponent CreateMapComponentForBug(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
     public static RadarMapComponent CreateMapComponentForItem(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
+    public static RadarMapComponent CreateMapComponentForPet(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
     public static RadarMapComponent CreateMapComponentForHostile(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
     public static RadarMapComponent CreateMapComponentForPassive(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
     public static RadarMapComponent CreateMapComponentForNeutral(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
@@ -40,6 +41,7 @@ public static class HardcodedExceptions
         else if (entity.IsBoat() && hiddenMarks.Contains("boat")) return true;
         else if (entity.IsBug() && hiddenMarks.Contains("bugs")) return true;
         else if (entity.IsItem() && hiddenMarks.Contains("item")) return true;
+        else if (entity.IsPet() && hiddenMarks.Contains("pet")) return true;
         else if (entity.IsHostile() && hiddenMarks.Contains("hostile")) return true;
         else if (entity.IsPassive() && hiddenMarks.Contains("passive")) return true;
         else if (entity.IsNeutral() && hiddenMarks.Contains("neutral")) return true;
@@ -52,6 +54,7 @@ public static class HardcodedExceptions
     public static bool IsBoat(this Entity entity) => entity.Code.ToString().Contains("boat") || entity is EntityBoat;
     public static bool IsBug(this Entity entity) => entity.Code.ToString().Contains("butterfly") || entity.Code.ToString().Contains("grub");
     public static bool IsItem(this Entity entity) => entity.Code.ToString().Contains("game:item");
+    public static bool IsPet(this Entity entity) => entity.HasBehavior("tameable");
 
     public static bool IsHostile(this Entity entity)
     {

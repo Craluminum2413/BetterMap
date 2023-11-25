@@ -18,6 +18,7 @@ namespace MobsRadar
 
         private LoadedTexture fallbackTexture;       // Fallback texture for entities not found in EntityCodes
         private LoadedTexture itemTexture;           // Texture for items
+        private LoadedTexture petTexture;           // Texture for pets
         private LoadedTexture projectileTexture;     // Texture for projectiles
         private LoadedTexture fishTexture;           // Texture for fish
         private LoadedTexture bugTexture;            // Texture for butterflies
@@ -118,6 +119,7 @@ namespace MobsRadar
             boatTexture = capi.BoatMarkTexture();
             bugTexture = capi.BugMarkTexture();
             itemTexture = capi.ItemMarkTexture();
+            petTexture = capi.PetMarkTexture();
             passiveTexture = capi.PassiveMarkTexture();
             neutralTexture = capi.NeutralMarkTexture();
         }
@@ -151,6 +153,7 @@ namespace MobsRadar
             else if (entity.IsBoat()) mapComponent = capi.CreateMapComponentForBoat(entity, boatTexture);
             else if (entity.IsBug()) mapComponent = capi.CreateMapComponentForBug(entity, bugTexture);
             else if (entity.IsItem()) mapComponent = capi.CreateMapComponentForItem(entity, itemTexture);
+            else if (entity.IsPet()) mapComponent = capi.CreateMapComponentForPet(entity, petTexture);
             else if (entity.IsHostile()) mapComponent = capi.CreateMapComponentForHostile(entity, hostileTexture);
             else if (entity.IsPassive()) mapComponent = capi.CreateMapComponentForPassive(entity, passiveTexture);
             else if (entity.IsNeutral()) mapComponent = capi.CreateMapComponentForNeutral(entity, neutralTexture);
@@ -198,6 +201,9 @@ namespace MobsRadar
 
             passiveTexture?.Dispose();
             passiveTexture = null;
+
+            petTexture?.Dispose();
+            petTexture = null;
         }
     }
 }

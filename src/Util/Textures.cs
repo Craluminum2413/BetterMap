@@ -55,6 +55,7 @@ public static class Textures
     public static LoadedTexture FishMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["fish"].Size, GetSettings(capi).Markers["fish"].Color);
     public static LoadedTexture HostileMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["hostile"].Size, GetSettings(capi).Markers["hostile"].Color);
     public static LoadedTexture ItemMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["item"].Size, GetSettings(capi).Markers["item"].Color);
+    public static LoadedTexture PetMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["pet"].Size, GetSettings(capi).Markers["pet"].Color);
     public static LoadedTexture NeutralMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["neutral"].Size, GetSettings(capi).Markers["neutral"].Color);
     public static LoadedTexture PassiveMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["passive"].Size, GetSettings(capi).Markers["passive"].Color);
     public static LoadedTexture ProjectileMarkTexture(this ICoreClientAPI capi) => capi.CreateMarkTexture(GetSettings(capi).Markers["projectile"].Size, GetSettings(capi).Markers["projectile"].Color);
