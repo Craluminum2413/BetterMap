@@ -1,16 +1,15 @@
-namespace MobsRadar
+namespace MobsRadar;
+
+public enum EnumEntityCategory
 {
-    public enum EnumEntityCategory
-    {
-        boat,
-        bugs,
-        other,
-        fish,
-        hostile,
-        item,
-        pet,
-        neutral,
-        passive,
-        projectile
-    }
+    boat,
+    bugs,
+    other,
+    fish,
+    hostile,
+    item,
+    pet,
+    neutral,
+    passive,
+    projectile
 }
