@@ -14,8 +14,8 @@ public class LoadedEntityMark
     public bool ShouldBeRendered(Entity entity, ICoreClientAPI capi)
     {
         var player = capi.World.Player;
-        var playerPos = player.Entity.ServerPos;
-        var entityPos = entity.ServerPos;
+        var playerPos = player.Entity.Pos;
+        var entityPos = entity.Pos;
 
         return Visible
             && playerPos.HorDistanceTo(entityPos) <= maxHorizontalDistance
