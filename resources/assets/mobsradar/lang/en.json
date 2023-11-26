@@ -1,4 +1,4 @@
 {
     "ToggleRadar": "Show/Hide 'Mobs Radar'",
-    "maplayer-creatures": "Creatures"
+    "game:maplayer-creatures": "Creatures"
 }
