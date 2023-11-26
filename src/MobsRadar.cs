@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.GameContent;
 
-[assembly: ModInfo("Mobs Radar")]
+[assembly: ModInfo(name: "Mobs Radar", modID: "mobsradar", Side = "Client")]
 
 namespace MobsRadar;
 
