@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -19,7 +20,7 @@ public class MobsRadar : ModSystem
         try
         {
             MarkerConfig = api.LoadModConfig<Dictionary<EnumEntityCategory, ConfigEntityMark>>("MobsRadarConfig.json");
-            if (MarkerConfig != null)
+            if (MarkerConfig != null && MarkerConfig.Count == Enum.GetValues(typeof(EnumEntityCategory)).Length)
             {
                 api.Logger.Notification("MobsRadar Config successfully loaded.");
             }
@@ -40,7 +41,7 @@ public class MobsRadar : ModSystem
         }
 
         api.ModLoader.GetModSystem<WorldMapManager>().RegisterMapLayer<MobsRadarMapLayer>("MobsRadar", 0.5);
-        api.Input.RegisterHotKey("mobsradar", Lang.Get("mobsradar:Action.ToggleRadar"), GlKeys.R, HotkeyType.GUIOrOtherControls, ctrlPressed: true);
+        api.Input.RegisterHotKey("mobsradar", Lang.Get("mobsradar:ToggleRadar"), GlKeys.R, HotkeyType.GUIOrOtherControls, ctrlPressed: true);
         api.Input.SetHotKeyHandler("mobsradar", (keycomb) => ToggleRadar(api));
 
         api.World.Logger.Event("started 'Mobs Radar' mod");
