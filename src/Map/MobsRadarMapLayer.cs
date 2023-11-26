@@ -61,8 +61,6 @@ public class MobsRadarMapLayer : MapLayer
         }
     }
 
-
-
     public override void OnMapOpenedClient()
     {
 

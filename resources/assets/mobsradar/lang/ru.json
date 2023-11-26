@@ -1,21 +1,4 @@
 {
-    "Action.ToggleRadar": "Показать/Скрыть 'Радар Мобов'",
-    "Color.LightBlue": "<font color=\"#99c9f9\">{0}</font>",
-    "SelfColoredText": "<font color=\"{0}\">{0}</font>",
-    "Radar.MarkersNameSizeColor": "<font family=\"Consolas\">Метки: [ Имя | Размер | Цвет ]</font>",
-    "Radar.MarkerNameSizeColorFormat": "<font family=\"Consolas\">[ {0} | {1} | {2} ]</font>",
-    "Error.WordNotAvailable": "Метка не существует: {0}",
-    "Error.NotValidHex": "Недопустимый шестнадцатеричный код: {0}",
-    "Success.MarkerNowHidden": "({0}) Показана метка",
-    "Success.MarkerNowVisible": "({0}) Метка скрыта",
-    "Success.MarkerSizeSet": "({0}) Размер метки установлен на {1}",
-    "Success.MarkerColorSet": "({0}) Цвет метки установлен на {1}",
-    "Success.RadiusSet": "({0}) Радиус установлен на {1}",
-    "Success.OpacitySet": "Непрозрачность установлена на {0}",
-    "Vertical": "Вертикальный",
-    "Horizontal": "Горизонтальный",
-    "Radar.Opacity0": "<font family=\"Consolas\">Непрозрачность: {0}</font>",
-    "Radar.Opacity": "Непрозрачность",
-    "Radar.Radius0": "<font family=\"Consolas\">Радиус: {0} / {1}: {2} / {3}</font>",
-    "Radar.Radius": "Радиус"
+    "ToggleRadar": "Показать/Скрыть 'Радар Мобов'",
+    "maplayer-creatures": "Существа"
 }
