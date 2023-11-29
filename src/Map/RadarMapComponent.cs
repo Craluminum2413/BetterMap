@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using Vintagestory.API.Client;
+using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
@@ -26,7 +27,7 @@ public class RadarMapComponent : EntityMapComponent
         {
             double distance = playerEntity.Pos.DistanceTo(entity.Pos);
 
-            hoverText.Append(entity.GetName());
+            hoverText.Append(GetEntityName(entity));
 
             if (entity.WatchedAttributes.HasAttribute("health"))
             {
@@ -38,5 +39,17 @@ public class RadarMapComponent : EntityMapComponent
 
             hoverText.Append(" | ").AppendLine(Lang.Get("createworld-worldheight", Math.Round(distance).ToString()));
         }
+    }
+
+    private string GetEntityName(Entity entity)
+    {
+        string original = entity.GetName();
+
+        return entity switch
+        {
+            EntityItem entityItem => entityItem?.Slot?.GetStackName(),
+            EntityBlockFalling entityBlockFalling => entityBlockFalling?.Block?.GetPlacedBlockName(entity.World, entity.Pos.AsBlockPos),
+            _ => Lang.GetMatching(original.Replace("-creature", "").Replace("thrownstone", "stone")),
+        };
     }
 }
