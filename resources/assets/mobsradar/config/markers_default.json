@@ -1,0 +1,15 @@
+{
+    "default": { "Icon": null, "Visible": true, "Size": 28, "Color": "#777777" },
+    "dead": { "Icon": "game:textures/icons/worldmap/skull_and_crossbones.svg", "Visible": true, "Size": 28, "Color": "#ffff00" },
+    "pet": { "Icon": null, "Visible": true, "Size": 28, "Color": "#008000" },
+    "boat": { "Icon": null, "Visible": true, "Size": 28, "Color": "#00aaff", "MatchClasses": ["EntityBoat"] },
+    "butterfly": { "Icon": "mobsradar:textures/icons/butterfly.svg", "Visible": true, "Size": 24, "Color": "#777777", "MatchClasses": ["EntityButterfly"] },
+    "bee": { "Icon": "game:textures/icons/worldmap/bee.svg", "Visible": true, "Size": 24, "Color": "#ff0000", "MatchClasses": ["EntityBeeMob"] },
+    "fish": { "Icon": null, "Visible": true, "Size": 24, "Color": "#add8e6", "MatchClasses": ["EntityFish"] },
+    "hostile": { "Icon": null, "Visible": true, "Size": 28, "Color": "#ff0000", "MatchTypes": ["eidolon-*", "bell-*", "locust-*", "drifter-*", "wolf-*", "hyena-*", "bear-*"] },
+    "item": { "Icon": null, "Visible": true, "Size": 24, "Color": "#ff99ff", "MatchClasses": ["EntityItem"] },
+    "neutral": { "Icon": null, "Visible": true, "Size": 28, "Color": "#ffa500", "MatchTypes": ["goat-*", "fox-*", "sheep-*", "chicken-*", "pig-*", "deer-*", "moose-*"] },
+    "passive": { "Icon": null, "Visible": true, "Size": 28, "Color": "#00ff00", "MatchTypes": ["hare-*", "raccoon-*", "gazelle-*"] },
+    "projectile": { "Icon": null, "Visible": true, "Size": 24, "Color": "#00ffff", "MatchClasses": ["EntityProjectile", "EntityThrownBeenade", "EntityThrownStone"] },
+    "trader": { "Icon": null, "Visible": true, "Size": 28, "Color": "#0000ff", "MatchClasses": ["EntityTrader"] }
+}

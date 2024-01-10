@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -10,9 +11,11 @@ namespace MobsRadar;
 public class Core : ModSystem
 {
     public static Config Config { get; set; }
+    public static Dictionary<string, EntityMark> DefaultMarkers { get; set; }
 
     public override void AssetsLoaded(ICoreAPI api)
     {
+        DefaultMarkers = api.Assets.TryGet("mobsradar:config/markers_default.json").ToObject<Dictionary<string, EntityMark>>();
         Config = ModConfig.ReadConfig(api);
     }
 
@@ -34,8 +37,12 @@ public class Core : ModSystem
         Config = ModConfig.ReadConfig(capi);
 
         MobsRadarMapLayer mobsradar = capi.ModLoader.GetModSystem<WorldMapManager>().MapLayers.Find(layer => layer is MobsRadarMapLayer) as MobsRadarMapLayer;
-        mobsradar.UpdateTextures();
-        mobsradar.UpdateMarkers();
+        if (Config.RefreshRate == -1)
+        {
+            mobsradar.Dispose();
+            mobsradar.UpdateTextures();
+            mobsradar.UpdateMarkers();
+        }
         return true;
     }
 }

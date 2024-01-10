@@ -44,6 +44,11 @@ public class MobsRadarMapLayer : MapLayer
 
         LoadedEntityMark loadedMarker = loadedEntityMarkers.GetValueSafe(capi.GetEntityConfigName(entity));
 
+        if (loadedMarker == null)
+        {
+            return;
+        }
+
         if (!mapSink.IsOpened || MapComps.ContainsKey(entity.EntityId) || !loadedMarker.ShouldBeRendered(entity, capi))
         {
             return;
@@ -124,29 +129,44 @@ public class MobsRadarMapLayer : MapLayer
         if (secondsSinceLastTickUpdate < (Core.Config.RefreshRate / 1000)) return;
         secondsSinceLastTickUpdate = 0;
 
+        Dispose();
         UpdateTextures();
         UpdateMarkers();
     }
 
     public void UpdateTextures()
     {
-        Dispose();
         loadedEntityMarkers = new();
         foreach ((string key, EntityMark marker) in Core.Config.Markers)
         {
             int size = (int)GuiElement.scaled(marker.Size);
+
+            loadedEntityMarkers.Add(key, new LoadedEntityMark()
+            {
+                Visible = marker.Visible,
+                Texture = DrawIcon(marker, size)
+            });
+        }
+    }
+
+    private LoadedTexture DrawIcon(EntityMark marker, int size)
+    {
+        if (!string.IsNullOrEmpty(marker.Icon) && api.Assets.TryGet(marker.Icon) != null)
+        {
+            return capi.Gui.LoadSvgWithPadding(new AssetLocation(marker.Icon), size, size, 7, marker.Color != null ? ColorUtil.Hex2Int(marker.Color) : null);
+        }
+        else
+        {
             ImageSurface surface = new ImageSurface(Format.Argb32, size, size);
             Context ctx = new Context(surface);
             ctx.SetSourceRGBA(0, 0, 0, 0);
             ctx.Paint();
             capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, new double[] { 0.3, 0.3, 0.3, 1 }, ColorUtil.Hex2Doubles(marker.Color));
-            loadedEntityMarkers.Add(key, new LoadedEntityMark()
-            {
-                Visible = marker.Visible,
-                Texture = new LoadedTexture(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2)
-            });
+
+            LoadedTexture _texture = new LoadedTexture(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2);
             ctx.Dispose();
             surface.Dispose();
+            return _texture;
         }
     }
 

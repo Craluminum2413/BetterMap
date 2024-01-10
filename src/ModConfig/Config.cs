@@ -6,7 +6,9 @@ namespace MobsRadar;
 
 public class Config
 {
-    public readonly string RefreshRateComment = "(in milliseconds. default: 1000, disable: -1) How often to check for alive status, visibility, horizontal and vertical radius of markers";
+    public readonly string Comment = "\"dead\" and \"pet\" are used for not configurable states of entities. You can add your own groups";
+    public readonly string CommentIcon = "(icons require full asset path to svg icon, set to null to disable) For example, game:textures/icons/checkmark.svg";
+    public readonly string CommentRefreshRate = "(in milliseconds. default: 1000, disable: -1) How often to check for alive status, visibility, horizontal and vertical radius of markers";
     public int RefreshRate { get; set; } = 1000;
 
     public int HorizontalRadius { get; set; } = 999;
@@ -16,6 +18,7 @@ public class Config
 
     public Config()
     {
+        FillDefault();
     }
 
     public Config(ICoreAPI api, Config previousConfig)
@@ -33,31 +36,12 @@ public class Config
             VerticalRadius = previousConfig.VerticalRadius;
         }
 
-        if (api != null)
-        {
-            FillDefault(api);
-        }
+        FillDefault();
     }
 
-    private void FillDefault(ICoreAPI api)
+    private void FillDefault()
     {
-        Dictionary<string, EntityMark> DefaultMarkers = new()
-        {
-            ["boat"] = new() { Icon = null, Visible = true, Size = 28, Color = "#00aaff" },
-            ["bug"] = new() { Icon = null, Visible = true, Size = 24, Color = "#777777" },
-            ["dead"] = new() { Icon = null, Visible = true, Size = 28, Color = "#ffff00" },
-            ["default"] = new() { Icon = null, Visible = true, Size = 28, Color = "#777777" },
-            ["fish"] = new() { Icon = null, Visible = true, Size = 24, Color = "#add8e6" },
-            ["hostile"] = new() { Icon = null, Visible = true, Size = 28, Color = "#ff0000" },
-            ["item"] = new() { Icon = null, Visible = true, Size = 24, Color = "#ff99ff" },
-            ["neutral"] = new() { Icon = null, Visible = true, Size = 28, Color = "#ffa500" },
-            ["passive"] = new() { Icon = null, Visible = true, Size = 28, Color = "#00ff00" },
-            ["pet"] = new() { Icon = null, Visible = true, Size = 28, Color = "#008000" },
-            ["projectile"] = new() { Icon = null, Visible = true, Size = 24, Color = "#00ffff" },
-            ["trader"] = new() { Icon = null, Visible = true, Size = 28, Color = "#0000ff" }
-        };
-
-        foreach ((string key, EntityMark value) in DefaultMarkers)
+        foreach ((string key, EntityMark value) in Core.DefaultMarkers)
         {
             if (!Markers.ContainsKey(key))
             {
