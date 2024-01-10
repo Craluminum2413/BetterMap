@@ -172,26 +172,26 @@ public class MobsRadarMapLayer : MapLayer
 
     public void UpdateMarkers()
     {
-        foreach (KeyValuePair<long, Entity> val in capi.World.LoadedEntities)
+        foreach ((long id, Entity entity) in capi.World.LoadedEntities)
         {
             RadarMapComponent cmp;
 
-            if (val.Value is EntityPlayer) continue;
+            if (entity is EntityPlayer) continue;
 
-            if (MapComps.TryGetValue(val.Value.EntityId, out cmp))
+            if (MapComps.TryGetValue(entity.EntityId, out cmp))
             {
                 cmp?.Dispose();
-                MapComps.Remove(val.Value.EntityId);
+                MapComps.Remove(entity.EntityId);
             }
 
-            LoadedEntityMark loadedMarker = loadedEntityMarkers.GetValueSafe(capi.GetEntityConfigName(val.Value));
-            if (loadedMarker == null || !loadedMarker.ShouldBeRendered(val.Value, capi))
+            LoadedEntityMark loadedMarker = loadedEntityMarkers.GetValueSafe(capi.GetEntityConfigName(entity));
+            if (loadedMarker == null || !loadedMarker.ShouldBeRendered(entity, capi))
             {
                 continue;
             }
 
-            cmp = new RadarMapComponent(capi, loadedMarker.Texture, val.Value);
-            MapComps[val.Value.EntityId] = cmp;
+            cmp = new RadarMapComponent(capi, loadedMarker.Texture, entity);
+            MapComps[entity.EntityId] = cmp;
         }
     }
 }

@@ -4,7 +4,7 @@ using Vintagestory.API.Util;
 
 namespace MobsRadar;
 
-public static class HardcodedExceptions
+public static class Extensions
 {
     public static string GetEntityConfigName(this ICoreClientAPI capi, Entity entity)
     {
