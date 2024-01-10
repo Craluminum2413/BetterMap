@@ -1,21 +1,4 @@
 {
-    "Action.ToggleRadar": "Показати/Приховати 'Радар Мобів'",
-    "Color.LightBlue": "<font color=\"#99c9f9\">{0}</font>",
-    "SelfColoredText": "<font color=\"{0}\">{0}</font>",
-    "Radar.MarkersNameSizeColor": "<font family=\"Consolas\">Мітки: [ Ім'я | Розмір | Колір ]</font>",
-    "Radar.MarkerNameSizeColorFormat": "<font family=\"Consolas\">[ {0} | {1} | {2} ]</font>",
-    "Error.WordNotAvailable": "Мітка не існує: {0}",
-    "Error.NotValidHex": "Неприпустимий шістнадцятковий код: {0}",
-    "Success.MarkerNowHidden": "({0}) Показано мітку",
-    "Success.MarkerNowVisible": "({0}) Мітка прихована",
-    "Success.MarkerSizeSet": "({0}) Розмір мітки встановлено на {1}",
-    "Success.MarkerColorSet": "({0}) Колір мітки встановлено на {1}",
-    "Success.RadiusSet": "({0}) Радіус встановлено на {1}",
-    "Success.OpacitySet": "Непрозорість встановлена на {0}",
-    "Vertical": "Вертикальний",
-    "Horizontal": "Горизонтальний",
-    "Radar.Opacity0": "<font family=\"Consolas\">Непрозорість: {0}</font>",
-    "Radar.Opacity": "Непрозорість",
-    "Radar.Radius0": "<font family=\"Consolas\">Радіус: {0} / {1}: {2} / {3}</font>",
-    "Radar.Radius": "Радіус"
+    "ToggleRadar": "Показати/Приховати 'Радар Мобів'",
+    "game:maplayer-creatures": "Істоти"
 }

@@ -1,6 +1,4 @@
-using System;
 using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.GameContent;
 
@@ -8,50 +6,46 @@ namespace MobsRadar;
 
 public static class HardcodedExceptions
 {
-    public static bool IsExcluded(this ICoreClientAPI capi, Entity entity) => entity is EntityPlayer { Player: not null }
-        || entity is EntityTrader
-        || entity.IsHidden()
-        || IsOutOfRange(capi, capi.World.Player.Entity.Pos, entity.Pos);
+    // public static bool ShouldBeRendered(this ICoreClientAPI capi, Entity entity)
+    // {
+    //     return Core.Config.Markers.GetValueSafe(capi.GetEntityConfigName(entity)).Visible && !IsOutOfRange(capi, entity);
+    // }
 
-    public static bool IsOutOfRange(this ICoreClientAPI capi, EntityPos pos1, EntityPos pos2)
+    // public static bool IsOutOfRange(this ICoreClientAPI capi, Entity entity)
+    // {
+    //     IClientPlayer player = capi.World.Player;
+    //     EntityPos playerPos = player.Entity.Pos;
+    //     EntityPos entityPos = entity.Pos;
+
+    //     double horizontalRange = playerPos.HorDistanceTo(entityPos);
+    //     double verticalRange = Math.Abs(playerPos.Y - entityPos.Y);
+    //     return horizontalRange > Core.Config.HorizontalRadius || verticalRange > Core.Config.VerticalRadius;
+    // }
+
+    public static string GetEntityConfigName(this ICoreClientAPI capi, Entity entity)
     {
-        var core = capi.ModLoader.GetModSystem<Core>();
-        int horizontalRange = Math.Abs(pos2.XYZInt.X - pos1.XYZInt.X) + Math.Abs(pos2.XYZInt.Z - pos1.XYZInt.Z);
-        int verticalRange = Math.Abs(pos2.XYZInt.Y - pos1.XYZInt.Y);
-        return horizontalRange > core.GetHorizontalRadius() || verticalRange > core.GetVerticalRadius();
+        if (entity.IsDead()) return "dead";
+        else if (entity.IsPet(capi.World.Player)) return "pet";
+        else if (entity.IsProjectile()) return "projectile";
+        else if (entity.IsTrader()) return "trader";
+        else if (entity.IsFish()) return "fish";
+        else if (entity.IsBoat()) return "boat";
+        else if (entity.IsBug()) return "bugs";
+        else if (entity.IsItem()) return "item";
+        else if (entity.IsHostile()) return "hostile";
+        else if (entity.IsPassive()) return "passive";
+        else if (entity.IsNeutral()) return "neutral";
+        return "default";
     }
 
-    public static RadarMapComponent CreateMapComponentForProjectile(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static RadarMapComponent CreateMapComponentForFish(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static RadarMapComponent CreateMapComponentForBoat(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static RadarMapComponent CreateMapComponentForBug(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static RadarMapComponent CreateMapComponentForItem(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static RadarMapComponent CreateMapComponentForHostile(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static RadarMapComponent CreateMapComponentForPassive(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static RadarMapComponent CreateMapComponentForNeutral(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-    public static RadarMapComponent CreateMapComponentForDefault(this ICoreClientAPI capi, Entity entity, LoadedTexture texture) => new(capi, texture, entity);
-
-    public static bool IsHidden(this Entity entity)
-    {
-        var hiddenMarks = entity.Api.ModLoader.GetModSystem<Core>().RadarSetttings.Settings.HiddenMarks;
-
-        if (entity.IsProjectile() && hiddenMarks.Contains("projectile")) return true;
-        else if (entity.IsFish() && hiddenMarks.Contains("fish")) return true;
-        else if (entity.IsBoat() && hiddenMarks.Contains("boat")) return true;
-        else if (entity.IsBug() && hiddenMarks.Contains("bugs")) return true;
-        else if (entity.IsItem() && hiddenMarks.Contains("item")) return true;
-        else if (entity.IsHostile() && hiddenMarks.Contains("hostile")) return true;
-        else if (entity.IsPassive() && hiddenMarks.Contains("passive")) return true;
-        else if (entity.IsNeutral() && hiddenMarks.Contains("neutral")) return true;
-        else if (hiddenMarks.Contains("default")) return true;
-        return false;
-    }
-
+    public static bool IsDead(this Entity entity) => !entity.Alive;
+    public static bool IsTrader(this Entity entity) => entity is EntityTrader;
     public static bool IsProjectile(this Entity entity) => entity is EntityProjectile or EntityThrownBeenade or EntityThrownStone;
     public static bool IsFish(this Entity entity) => entity is EntityFish;
     public static bool IsBoat(this Entity entity) => entity.Code.ToString().Contains("boat") || entity is EntityBoat;
     public static bool IsBug(this Entity entity) => entity.Code.ToString().Contains("butterfly") || entity.Code.ToString().Contains("grub");
     public static bool IsItem(this Entity entity) => entity.Code.ToString().Contains("game:item");
+    public static bool IsPet(this Entity entity, IClientPlayer player) => entity.HasBehavior("tameable") && entity.WatchedAttributes.GetTreeAttribute("domesticationstatus")?.GetString("owner") == player.PlayerUID;
 
     public static bool IsHostile(this Entity entity)
     {
@@ -80,6 +74,8 @@ public static class HardcodedExceptions
         return code.Contains("fox")
             || code.Contains("sheep")
             || code.Contains("chicken")
-            || code.Contains("pig");
+            || code.Contains("pig")
+            || code.Contains("deer")
+            || code.Contains("moose");
     }
 }

@@ -1,35 +1,55 @@
-using System.Collections.Generic;
-using System.IO;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.GameContent;
 
-[assembly: ModInfo("Mobs Radar")]
+[assembly: ModInfo(name: "Mobs Radar", modID: "mobsradar")]
 
 namespace MobsRadar;
 
 public class Core : ModSystem
 {
-    public List<string> AvailableMarks { get; set; }
-    public SettingsFile<RadarSettings> RadarSetttings { get; set; } = new(Path.Combine(GamePaths.ModConfig, "MobsRadarConfig.json"));
-
-    public bool IsEnabled() => RadarSetttings.Settings.Enabled;
-    public int GetHorizontalRadius() => RadarSetttings.Settings.HorizontalRadius;
-    public int GetVerticalRadius() => RadarSetttings.Settings.VerticalRadius;
+    public static Config Config { get; set; }
 
     public override void AssetsLoaded(ICoreAPI api)
     {
-        AvailableMarks = api.Assets.Get(new AssetLocation("mobsradar:config/markers.json")).ToObject<List<string>>();
+        Config = ModConfig.ReadConfig(api);
     }
 
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
 
-        var worldMapManager = api.ModLoader.GetModSystem<WorldMapManager>();
-        worldMapManager.RegisterMapLayer<MobsRadarMapLayer>("MobsRadar");
+        WorldMapManager worldMapManager = api.ModLoader.GetModSystem<WorldMapManager>();
+        worldMapManager.RegisterMapLayer<MobsRadarMapLayer>("MobsRadar", 0.5);
 
-        api.World.Logger.Event("started 'Mobs Radar' mod");
+        api.Input.RegisterHotKey("mobsradar", Lang.Get("mobsradar:ToggleRadar"), GlKeys.R, HotkeyType.GUIOrOtherControls, ctrlPressed: true);
+        api.Input.SetHotKeyHandler("mobsradar", (keycomb) => ToggleRadar(api));
+
+        api.Input.RegisterHotKey("mobsradarconfig", Lang.Get("mobsradar:UpdateRadarConfig"), GlKeys.R, HotkeyType.GUIOrOtherControls, shiftPressed: true);
+        api.Input.SetHotKeyHandler("mobsradarconfig", (keycomb) => UpdateRadarConfig(api));
+
+        api.World.Logger.Event("started '{0}' mod", Mod.Info.Name);
+    }
+
+    private static bool UpdateRadarConfig(ICoreClientAPI capi)
+    {
+        Config = ModConfig.ReadConfig(capi);
+
+        MobsRadarMapLayer mobsradar = capi.ModLoader.GetModSystem<WorldMapManager>().MapLayers.Find(layer => layer is MobsRadarMapLayer) as MobsRadarMapLayer;
+        mobsradar.UpdateTextures();
+        mobsradar.UpdateMarkers();
+        return true;
+    }
+
+    private static bool ToggleRadar(ICoreClientAPI capi)
+    {
+        MapLayer mobsradar = capi.ModLoader.GetModSystem<WorldMapManager>().MapLayers.Find(layer => layer is MobsRadarMapLayer);
+        if (mobsradar != null)
+        {
+            mobsradar.Active = !mobsradar.Active;
+            return true;
+        }
+        return false;
     }
 }

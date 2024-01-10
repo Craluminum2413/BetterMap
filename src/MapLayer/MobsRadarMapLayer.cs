@@ -1,201 +1,155 @@
 using System.Collections.Generic;
 using System.Text;
+using Cairo;
+using HarmonyLib;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.MathTools;
 using Vintagestory.GameContent;
-using System;
 
-namespace MobsRadar
+namespace MobsRadar;
+
+public class MobsRadarMapLayer : MapLayer
 {
-    public class MobsRadarMapLayer : MapLayer
+    Dictionary<long, RadarMapComponent> MapComps = new();
+    ICoreClientAPI capi;
+    Dictionary<string, LoadedEntityMark> loadedEntityMarkers;
+    float secondsSinceLastTickUpdate;
+
+    public override string Title => "MobsRadar";
+    public override string LayerGroupCode => "creatures";
+    public override EnumMapAppSide DataSide => EnumMapAppSide.Client;
+
+    public MobsRadarMapLayer(ICoreAPI api, IWorldMapManager mapSink) : base(api, mapSink) => capi = api as ICoreClientAPI;
+
+    public override void OnLoaded()
     {
-        private readonly Dictionary<Entity, RadarMapComponent> MapComps = new();
-        private readonly ICoreClientAPI capi;
-        private float secondsSinceLastTickUpdate;
-
-        private Core GetCore() => capi.ModLoader.GetModSystem<Core>();
-
-        private LoadedTexture fallbackTexture;       // Fallback texture for entities not found in EntityCodes
-        private LoadedTexture itemTexture;           // Texture for items
-        private LoadedTexture projectileTexture;     // Texture for projectiles
-        private LoadedTexture fishTexture;           // Texture for fish
-        private LoadedTexture bugTexture;            // Texture for butterflies
-        private LoadedTexture boatTexture;           // Texture for boats
-
-        private LoadedTexture hostileTexture;        // Texture for drifters
-        private LoadedTexture passiveTexture;        // Texture for passive
-        private LoadedTexture neutralTexture;        // Texture for neutral
-
-        public override string Title => "MobsRadar";
-        public override EnumMapAppSide DataSide => EnumMapAppSide.Client;
-
-        public MobsRadarMapLayer(ICoreAPI api, IWorldMapManager mapSink) : base(api, mapSink) => capi = api as ICoreClientAPI;
-
-        public override void OnLoaded()
+        if (capi != null)
         {
-            if (capi != null)
+            capi.Event.OnEntitySpawn += Event_EntitySpawn;
+            capi.Event.OnEntityLoaded += Event_EntitySpawn;
+            capi.Event.OnEntityDespawn += Event_EntityDespawn;
+        }
+    }
+
+    private void Event_EntitySpawn(Entity entity)
+    {
+        if (entity is EntityPlayer) return;
+
+        LoadedEntityMark loadedMarker = loadedEntityMarkers.GetValueSafe(capi.GetEntityConfigName(entity));
+        if (mapSink.IsOpened && !MapComps.ContainsKey(entity.EntityId) && loadedMarker.ShouldBeRendered(entity, capi))
+        {
+            RadarMapComponent cmp = new RadarMapComponent(capi, loadedMarker.Texture, entity);
+            MapComps[entity.EntityId] = cmp;
+        }
+    }
+
+    private void Event_EntityDespawn(Entity entity, EntityDespawnData data)
+    {
+        if (MapComps.TryGetValue(entity.EntityId, out RadarMapComponent mapComponent))
+        {
+            mapComponent.Dispose();
+            MapComps.Remove(entity.EntityId);
+        }
+    }
+
+    public override void Render(GuiElementMap mapElem, float dt)
+    {
+        if (!Active) return;
+
+        foreach (KeyValuePair<long, RadarMapComponent> val in MapComps)
+        {
+            val.Value.Render(mapElem, dt);
+        }
+    }
+
+    public override void OnMouseMoveClient(MouseEvent args, GuiElementMap mapElem, StringBuilder hoverText)
+    {
+        if (!Active) return;
+
+        foreach (KeyValuePair<long, RadarMapComponent> val in MapComps)
+        {
+            val.Value.OnMouseMove(args, mapElem, hoverText);
+        }
+    }
+
+    public override void OnMouseUpClient(MouseEvent args, GuiElementMap mapElem)
+    {
+        if (!Active) return;
+
+        foreach (KeyValuePair<long, RadarMapComponent> val in MapComps)
+        {
+            val.Value.OnMouseUpOnElement(args, mapElem);
+        }
+    }
+
+    public override void Dispose()
+    {
+        foreach (KeyValuePair<long, RadarMapComponent> val in MapComps)
+        {
+            val.Value?.Dispose();
+        }
+        foreach (LoadedEntityMark val in loadedEntityMarkers.Values)
+        {
+            val?.Texture?.Dispose();
+        }
+        loadedEntityMarkers = null;
+    }
+
+    public override void OnTick(float dt)
+    {
+        if (!Active) return;
+
+        secondsSinceLastTickUpdate += dt;
+        if (secondsSinceLastTickUpdate < 1) return;
+        secondsSinceLastTickUpdate = 0;
+
+        UpdateTextures();
+        UpdateMarkers();
+    }
+
+    public void UpdateTextures()
+    {
+        loadedEntityMarkers = new();
+        foreach ((string key, EntityMark marker) in Core.Config.Markers)
+        {
+            int size = (int)GuiElement.scaled(marker.Size);
+            ImageSurface surface = new ImageSurface(Format.Argb32, size, size);
+            Context ctx = new Context(surface);
+            ctx.SetSourceRGBA(0, 0, 0, 0);
+            ctx.Paint();
+            capi.Gui.Icons.DrawMapPlayer(ctx, 0, 0, size, size, new double[] { 0.3, 0.3, 0.3, 1 }, ColorUtil.Hex2Doubles(marker.Color));
+            loadedEntityMarkers.Add(key, new LoadedEntityMark()
             {
-                InitializeTextures();
-                capi.Event.OnEntitySpawn += Event_EntitySpawn;
-                capi.Event.OnEntityDespawn += Event_EntityDespawn;
-            }
+                Visible = marker.Visible,
+                Texture = new LoadedTexture(capi, capi.Gui.LoadCairoTexture(surface, false), size / 2, size / 2)
+            });
+            ctx.Dispose();
+            surface.Dispose();
         }
+    }
 
-        public override void OnTick(float dt)
+    public void UpdateMarkers()
+    {
+        foreach (KeyValuePair<long, Entity> val in capi.World.LoadedEntities)
         {
-            if (!GetCore().RadarSetttings.Settings.Enabled) return;
+            RadarMapComponent cmp;
 
-            secondsSinceLastTickUpdate += dt;
-            if (secondsSinceLastTickUpdate < 1) return;
-            secondsSinceLastTickUpdate = 0;
+            if (val.Value is EntityPlayer) continue;
 
-            UpdateMarkers();
-        }
-
-        public override void Render(GuiElementMap mapElem, float dt)
-        {
-            if (!GetCore().RadarSetttings.Settings.Enabled) return;
-
-            foreach (var val in MapComps)
+            if (MapComps.TryGetValue(val.Value.EntityId, out cmp))
             {
-                if (capi.IsExcluded(val.Key)) continue;
-                val.Value.Render(mapElem, dt);
-            }
-        }
-
-        public override void OnMouseMoveClient(MouseEvent args, GuiElementMap mapElem, StringBuilder hoverText)
-        {
-            foreach (var val in MapComps)
-            {
-                if (capi.IsExcluded(val.Key)) continue;
-                val.Value.OnMouseMove(args, mapElem, hoverText);
-            }
-        }
-
-        public override void OnMouseUpClient(MouseEvent args, GuiElementMap mapElem)
-        {
-            foreach (var val in MapComps)
-            {
-                if (capi.IsExcluded(val.Key)) continue;
-                val.Value.OnMouseUpOnElement(args, mapElem);
-            }
-        }
-
-        public override void OnMapClosedClient() { }
-
-        public override void Dispose()
-        {
-            DisposeEntityMapComponents();
-            DisposeTextures();
-        }
-
-        private void Event_EntitySpawn(Entity entity)
-        {
-            if (mapSink.IsOpened && !MapComps.ContainsKey(entity))
-            {
-                CreateEntityMapComponent(entity);
-            }
-        }
-
-        private void Event_EntityDespawn(Entity entity, EntityDespawnData data)
-        {
-            if (MapComps.TryGetValue(entity, out var mapComponent))
-            {
-                mapComponent.Dispose();
-                MapComps.Remove(entity);
-            }
-        }
-
-        public void InitializeTextures()
-        {
-            fallbackTexture = capi.DefaultMarkTexture();
-            projectileTexture = capi.ProjectileMarkTexture();
-            hostileTexture = capi.HostileMarkTexture();
-            fishTexture = capi.FishMarkTexture();
-            boatTexture = capi.BoatMarkTexture();
-            bugTexture = capi.BugMarkTexture();
-            itemTexture = capi.ItemMarkTexture();
-            passiveTexture = capi.PassiveMarkTexture();
-            neutralTexture = capi.NeutralMarkTexture();
-        }
-
-        private void UpdateMarkers()
-        {
-            foreach (var entity in capi.World.LoadedEntities.Values)
-            {
-                if (MapComps.TryGetValue(entity, out var mapComponent))
-                {
-                    mapComponent?.Dispose();
-                    MapComps.Remove(entity);
-                }
-
-                if (entity == null)
-                {
-                    capi.World.Logger.Warning("Can't add entity to world map, missing entity :<");
-                    continue;
-                }
-
-                mapComponent = CreateEntityMapComponent(entity);
-            }
-        }
-
-        private RadarMapComponent CreateEntityMapComponent(Entity entity)
-        {
-            RadarMapComponent mapComponent;
-
-            if (entity.IsProjectile()) mapComponent = capi.CreateMapComponentForProjectile(entity, projectileTexture);
-            else if (entity.IsFish()) mapComponent = capi.CreateMapComponentForFish(entity, fishTexture);
-            else if (entity.IsBoat()) mapComponent = capi.CreateMapComponentForBoat(entity, boatTexture);
-            else if (entity.IsBug()) mapComponent = capi.CreateMapComponentForBug(entity, bugTexture);
-            else if (entity.IsItem()) mapComponent = capi.CreateMapComponentForItem(entity, itemTexture);
-            else if (entity.IsHostile()) mapComponent = capi.CreateMapComponentForHostile(entity, hostileTexture);
-            else if (entity.IsPassive()) mapComponent = capi.CreateMapComponentForPassive(entity, passiveTexture);
-            else if (entity.IsNeutral()) mapComponent = capi.CreateMapComponentForNeutral(entity, neutralTexture);
-            else mapComponent = new(capi, fallbackTexture, entity);
-
-            MapComps[entity] = mapComponent;
-            return mapComponent;
-        }
-
-        private void DisposeEntityMapComponents()
-        {
-            foreach (var val in MapComps)
-            {
-                val.Value?.Dispose();
+                cmp?.Dispose();
+                MapComps.Remove(val.Value.EntityId);
             }
 
-            MapComps.Clear();
-        }
-
-        private void DisposeTextures()
-        {
-            fallbackTexture?.Dispose();
-            fallbackTexture = null;
-
-            projectileTexture?.Dispose();
-            projectileTexture = null;
-
-            fishTexture?.Dispose();
-            fishTexture = null;
-
-            boatTexture?.Dispose();
-            boatTexture = null;
-
-            bugTexture?.Dispose();
-            bugTexture = null;
-
-            itemTexture?.Dispose();
-            itemTexture = null;
-
-            hostileTexture?.Dispose();
-            hostileTexture = null;
-
-            neutralTexture?.Dispose();
-            neutralTexture = null;
-
-            passiveTexture?.Dispose();
-            passiveTexture = null;
+            LoadedEntityMark loadedMarker = loadedEntityMarkers[capi.GetEntityConfigName(val.Value)];
+            if (loadedMarker.ShouldBeRendered(val.Value, capi))
+            {
+                cmp = new RadarMapComponent(capi, loadedMarker.Texture, val.Value);
+                MapComps[val.Value.EntityId] = cmp;
+            }
         }
     }
 }
