@@ -1,4 +1,5 @@
 {
     "ToggleRadar": "Visa/Skydda 'Mobs Radar'",
+    "UpdateRadarConfig": "(Mobs Radar) Uppdatera konfigurationen",
     "game:maplayer-creatures": "Varelser"
 }

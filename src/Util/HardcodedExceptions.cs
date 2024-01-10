@@ -6,22 +6,6 @@ namespace MobsRadar;
 
 public static class HardcodedExceptions
 {
-    // public static bool ShouldBeRendered(this ICoreClientAPI capi, Entity entity)
-    // {
-    //     return Core.Config.Markers.GetValueSafe(capi.GetEntityConfigName(entity)).Visible && !IsOutOfRange(capi, entity);
-    // }
-
-    // public static bool IsOutOfRange(this ICoreClientAPI capi, Entity entity)
-    // {
-    //     IClientPlayer player = capi.World.Player;
-    //     EntityPos playerPos = player.Entity.Pos;
-    //     EntityPos entityPos = entity.Pos;
-
-    //     double horizontalRange = playerPos.HorDistanceTo(entityPos);
-    //     double verticalRange = Math.Abs(playerPos.Y - entityPos.Y);
-    //     return horizontalRange > Core.Config.HorizontalRadius || verticalRange > Core.Config.VerticalRadius;
-    // }
-
     public static string GetEntityConfigName(this ICoreClientAPI capi, Entity entity)
     {
         if (entity.IsDead()) return "dead";

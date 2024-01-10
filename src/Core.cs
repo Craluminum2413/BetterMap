@@ -23,9 +23,6 @@ public class Core : ModSystem
         WorldMapManager worldMapManager = api.ModLoader.GetModSystem<WorldMapManager>();
         worldMapManager.RegisterMapLayer<MobsRadarMapLayer>("MobsRadar", 0.5);
 
-        api.Input.RegisterHotKey("mobsradar", Lang.Get("mobsradar:ToggleRadar"), GlKeys.R, HotkeyType.GUIOrOtherControls, ctrlPressed: true);
-        api.Input.SetHotKeyHandler("mobsradar", (keycomb) => ToggleRadar(api));
-
         api.Input.RegisterHotKey("mobsradarconfig", Lang.Get("mobsradar:UpdateRadarConfig"), GlKeys.R, HotkeyType.GUIOrOtherControls, shiftPressed: true);
         api.Input.SetHotKeyHandler("mobsradarconfig", (keycomb) => UpdateRadarConfig(api));
 
@@ -40,16 +37,5 @@ public class Core : ModSystem
         mobsradar.UpdateTextures();
         mobsradar.UpdateMarkers();
         return true;
-    }
-
-    private static bool ToggleRadar(ICoreClientAPI capi)
-    {
-        MapLayer mobsradar = capi.ModLoader.GetModSystem<WorldMapManager>().MapLayers.Find(layer => layer is MobsRadarMapLayer);
-        if (mobsradar != null)
-        {
-            mobsradar.Active = !mobsradar.Active;
-            return true;
-        }
-        return false;
     }
 }

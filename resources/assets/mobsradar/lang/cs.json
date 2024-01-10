@@ -1,4 +1,5 @@
 {
     "ToggleRadar": "Zobrazit/skrýt 'Mobs Radar'",
+    "UpdateRadarConfig": "(Mobs Radar) Aktualizace konfigurace",
     "game:maplayer-creatures": "Bytosti"
 }

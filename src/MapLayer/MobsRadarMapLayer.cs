@@ -37,12 +37,20 @@ public class MobsRadarMapLayer : MapLayer
     {
         if (entity is EntityPlayer) return;
 
-        LoadedEntityMark loadedMarker = loadedEntityMarkers.GetValueSafe(capi.GetEntityConfigName(entity));
-        if (mapSink.IsOpened && !MapComps.ContainsKey(entity.EntityId) && loadedMarker.ShouldBeRendered(entity, capi))
+        if (loadedEntityMarkers == null || loadedEntityMarkers.Count == 0)
         {
-            RadarMapComponent cmp = new RadarMapComponent(capi, loadedMarker.Texture, entity);
-            MapComps[entity.EntityId] = cmp;
+            return;
         }
+
+        LoadedEntityMark loadedMarker = loadedEntityMarkers.GetValueSafe(capi.GetEntityConfigName(entity));
+
+        if (!mapSink.IsOpened || MapComps.ContainsKey(entity.EntityId) || !loadedMarker.ShouldBeRendered(entity, capi))
+        {
+            return;
+        }
+
+        RadarMapComponent cmp = new RadarMapComponent(capi, loadedMarker.Texture, entity);
+        MapComps[entity.EntityId] = cmp;
     }
 
     private void Event_EntityDespawn(Entity entity, EntityDespawnData data)
@@ -90,6 +98,12 @@ public class MobsRadarMapLayer : MapLayer
         {
             val.Value?.Dispose();
         }
+
+        if (loadedEntityMarkers == null || loadedEntityMarkers.Count == 0)
+        {
+            return;
+        }
+
         foreach (LoadedEntityMark val in loadedEntityMarkers.Values)
         {
             val?.Texture?.Dispose();
@@ -101,8 +115,13 @@ public class MobsRadarMapLayer : MapLayer
     {
         if (!Active) return;
 
+        if (Core.Config.RefreshRate == -1)
+        {
+            return;
+        }
+
         secondsSinceLastTickUpdate += dt;
-        if (secondsSinceLastTickUpdate < 1) return;
+        if (secondsSinceLastTickUpdate < (Core.Config.RefreshRate / 1000)) return;
         secondsSinceLastTickUpdate = 0;
 
         UpdateTextures();
@@ -111,6 +130,7 @@ public class MobsRadarMapLayer : MapLayer
 
     public void UpdateTextures()
     {
+        Dispose();
         loadedEntityMarkers = new();
         foreach ((string key, EntityMark marker) in Core.Config.Markers)
         {
@@ -144,12 +164,14 @@ public class MobsRadarMapLayer : MapLayer
                 MapComps.Remove(val.Value.EntityId);
             }
 
-            LoadedEntityMark loadedMarker = loadedEntityMarkers[capi.GetEntityConfigName(val.Value)];
-            if (loadedMarker.ShouldBeRendered(val.Value, capi))
+            LoadedEntityMark loadedMarker = loadedEntityMarkers.GetValueSafe(capi.GetEntityConfigName(val.Value));
+            if (loadedMarker == null || !loadedMarker.ShouldBeRendered(val.Value, capi))
             {
-                cmp = new RadarMapComponent(capi, loadedMarker.Texture, val.Value);
-                MapComps[val.Value.EntityId] = cmp;
+                continue;
             }
+
+            cmp = new RadarMapComponent(capi, loadedMarker.Texture, val.Value);
+            MapComps[val.Value.EntityId] = cmp;
         }
     }
 }

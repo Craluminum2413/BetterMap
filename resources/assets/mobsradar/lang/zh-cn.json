@@ -1,4 +1,5 @@
 {
     "ToggleRadar": "显示/隐藏 'Mobs Radar'",
+    "UpdateRadarConfig": "(Mobs Radar) 更新配置",
     "game:maplayer-creatures": "生物"
 }

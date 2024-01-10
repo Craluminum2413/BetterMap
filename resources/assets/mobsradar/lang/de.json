@@ -1,4 +1,5 @@
 {
     "ToggleRadar": "'Mobs Radar' anzeigen/verbergen",
+    "UpdateRadarConfig": "(Mobs Radar) Konfiguration aktualisieren",
     "game:maplayer-creatures": "Kreaturen"
 }

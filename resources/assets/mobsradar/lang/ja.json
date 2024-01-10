@@ -1,4 +1,5 @@
 {
     "ToggleRadar": "表示または非表示 'Mobs Radar'",
+    "UpdateRadarConfig": "(Mobs Radar) 設定の更新",
     "game:maplayer-creatures": "生き物"
 }

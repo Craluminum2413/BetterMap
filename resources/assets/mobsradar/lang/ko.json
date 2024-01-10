@@ -1,4 +1,5 @@
 {
     "ToggleRadar": "표시/숨기기 'Mobs Radar'",
+    "UpdateRadarConfig": "(Mobs Radar) 구성 업데이트",
     "game:maplayer-creatures": "생물"
 }

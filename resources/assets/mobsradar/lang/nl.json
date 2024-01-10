@@ -1,4 +1,5 @@
 {
     "ToggleRadar": "Toon/verberg 'Mobs Radar'",
+    "UpdateRadarConfig": "(Mobs Radar) Configuratie bijwerken",
     "game:maplayer-creatures": "Wezens"
 }
