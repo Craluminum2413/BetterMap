@@ -8,6 +8,7 @@
     "contributors": ["Apache", "G3rste"],
     "version": "2.0.0",
     "dependencies": {
-        "game": "1.19.0-rc.1"
+        "game": "1.19.0-rc.1",
+        "configlib": "0.3.3"
     }
 }
