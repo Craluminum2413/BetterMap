@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using MobsRadar.Configuration;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.GameContent;
 
-[assembly: ModInfo(name: "Mobs Radar", modID: "mobsradar")]
+[assembly: ModInfo(name: "Mobs Radar", modID: "mobsradar", Side = "Client")]
 
 namespace MobsRadar;
 
@@ -17,12 +18,15 @@ public class Core : ModSystem
     {
         DefaultMarkers = api.Assets.TryGet("mobsradar:config/markers_default.json").ToObject<Dictionary<string, EntityMark>>();
         Config = ModConfig.ReadConfig(api);
+
+        if (api.ModLoader.IsModEnabled("configlib"))
+        {
+            _ = new ConfigLibCompatibility(api as ICoreClientAPI);
+        }
     }
 
     public override void StartClientSide(ICoreClientAPI api)
     {
-        base.StartClientSide(api);
-
         WorldMapManager worldMapManager = api.ModLoader.GetModSystem<WorldMapManager>();
         worldMapManager.RegisterMapLayer<MobsRadarMapLayer>("MobsRadar", 0.5);
 
@@ -32,7 +36,7 @@ public class Core : ModSystem
         api.World.Logger.Event("started '{0}' mod", Mod.Info.Name);
     }
 
-    private static bool UpdateRadarConfig(ICoreClientAPI capi)
+    public static bool UpdateRadarConfig(ICoreClientAPI capi)
     {
         Config = ModConfig.ReadConfig(capi);
 
