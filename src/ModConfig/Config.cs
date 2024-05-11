@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using Vintagestory.API.Common;
-using Vintagestory.API.Util;
 
 namespace MobsRadar.Configuration;
 
@@ -19,20 +19,26 @@ public class Config
 
     public Config(ICoreAPI api, Config previousConfig)
     {
-        if (previousConfig?.Markers != null)
+        if (previousConfig != null)
         {
-            Markers.AddRange(previousConfig.Markers);
+            foreach ((string key, EntityMark value) in previousConfig.Markers.Where(keyVal => !Markers.ContainsKey(keyVal.Key)))
+            {
+                Markers.Add(key, value);
+            }
         }
 
-        RefreshRate = previousConfig?.RefreshRate ?? default;
-        HorizontalRadius = previousConfig?.HorizontalRadius ?? default;
-        VerticalRadius = previousConfig?.VerticalRadius ?? default;
+        RefreshRate = previousConfig.RefreshRate;
+        HorizontalRadius = previousConfig.HorizontalRadius;
+        VerticalRadius = previousConfig.VerticalRadius;
 
         FillDefault();
     }
 
     private void FillDefault()
     {
-        Markers.AddRange(Core.DefaultMarkers);
+        foreach ((string key, EntityMark value) in Core.DefaultMarkers.Where(keyVal => !Markers.ContainsKey(keyVal.Key)))
+        {
+            Markers.Add(key, value);
+        }
     }
 }
