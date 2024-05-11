@@ -97,6 +97,8 @@ public class ConfigLibCompatibility
         ImGui.ListBox(Lang.Get(settingMarkers) + $"##markers-{id}", ref selectedMarker, keys, keys.Length);
 
         ImGui.SeparatorText(Lang.Get(settingMarkerProperties));
+
+        // stub to fix later
         try
         {
             config.Markers[keys[selectedMarker]] = EditMarker(config.Markers[keys[selectedMarker]], id);
@@ -135,6 +137,7 @@ public class ConfigLibCompatibility
         ImGui.ColorEdit3(Lang.Get(settingColor) + $"##color-{id}", ref color3, ImGuiColorEditFlags.DisplayHex);
         entityMark.Color = ColorUtil.Doubles2Hex(new double[] { color3[0], color3[1], color3[2] });
 
+        // stub to fix later
         try
         {
             string types = entityMark.MatchTypes.Length > 0 ? entityMark.MatchTypes.Aggregate((first, second) => $"{first}\n{second}") : "";

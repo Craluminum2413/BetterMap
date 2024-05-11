@@ -6,7 +6,7 @@
     "description": "Detects creatures and adds markers for them on both world map and minimap.",
     "authors": ["Craluminum2413"],
     "contributors": ["Apache", "G3rste"],
-    "version": "2.1.0",
+    "version": "2.1.1",
     "dependencies": {
         "game": "1.19.0"
     }
