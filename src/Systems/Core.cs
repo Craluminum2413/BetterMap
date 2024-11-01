@@ -12,7 +12,7 @@ namespace MobsRadar;
 public class Core : ModSystem
 {
     public static Config Config { get; set; }
-    public static Dictionary<string, EntityMark> DefaultMarkers { get; set; }
+    public static Dictionary<string, EntityMark> DefaultMarkers { get; set; } = new();
 
     public override void AssetsLoaded(ICoreAPI api)
     {

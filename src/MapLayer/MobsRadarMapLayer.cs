@@ -120,6 +120,11 @@ public class MobsRadarMapLayer : MapLayer
     {
         if (!Active) return;
 
+        if (Core.Config == null)
+        {
+            return;
+        }
+
         if (Core.Config.RefreshRate == -1)
         {
             return;
