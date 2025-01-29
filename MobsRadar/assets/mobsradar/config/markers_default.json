@@ -6,7 +6,13 @@
     "butterfly": { "Icon": "mobsradar:textures/icons/butterfly.svg", "Visible": true, "Size": 24, "Color": "#777777", "MatchClasses": ["EntityButterfly"] },
     "bee": { "Icon": "game:textures/icons/worldmap/bee.svg", "Visible": true, "Size": 24, "Color": "#ff0000", "MatchClasses": ["EntityBeeMob"] },
     "fish": { "Icon": "mobsradar:textures/icons/fish.svg", "Visible": true, "Size": 24, "Color": "#add8e6", "MatchClasses": ["EntityFish"] },
-    "hostile": { "Icon": null, "Visible": true, "Size": 28, "Color": "#ff0000", "MatchTypes": ["eidolon-*", "bell-*", "locust-*", "drifter-*", "wolf-*", "hyena-*", "bear-*"] },
+    "hostile": {
+        "Icon": null,
+        "Visible": true,
+        "Size": 28,
+        "Color": "#ff0000",
+        "MatchTypes": ["eidolon-*", "bell-*", "locust-*", "drifter-*", "wolf-*", "hyena-*", "bear-*", "shiver-*", "bowtorn-*", "erel-corrupted"]
+    },
     "item": { "Icon": null, "Visible": true, "Size": 24, "Color": "#ff99ff", "MatchClasses": ["EntityItem"] },
     "neutral": { "Icon": null, "Visible": true, "Size": 28, "Color": "#ffa500", "MatchTypes": ["goat-*", "fox-*", "sheep-*", "chicken-*", "pig-*", "deer-*", "moose-*"] },
     "passive": { "Icon": null, "Visible": true, "Size": 28, "Color": "#00ff00", "MatchTypes": ["hare-*", "raccoon-*", "gazelle-*"] },
