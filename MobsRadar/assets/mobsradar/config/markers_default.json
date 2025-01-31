@@ -78,7 +78,7 @@
         "Visible": true,
         "Size": 24,
         "Color": "#00ffff",
-        "MatchClasses": ["EntityProjectile", "EntityThrownBeenade", "EntityThrownStone"]
+        "MatchClasses": ["EntityProjectile", "EntityThrownBeenade", "EntityThrownStone", "CombatOverhaul:Projectile"]
     },
     "trader": {
         "Icon": null,
