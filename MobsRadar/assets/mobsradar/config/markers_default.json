@@ -17,5 +17,5 @@
     "neutral": { "Icon": null, "Visible": true, "Size": 28, "Color": "#ffa500", "MatchTypes": ["goat-*", "fox-*", "sheep-*", "chicken-*", "pig-*", "deer-*", "moose-*"] },
     "passive": { "Icon": null, "Visible": true, "Size": 28, "Color": "#00ff00", "MatchTypes": ["hare-*", "raccoon-*", "gazelle-*"] },
     "projectile": { "Icon": null, "Visible": true, "Size": 24, "Color": "#00ffff", "MatchClasses": ["EntityProjectile", "EntityThrownBeenade", "EntityThrownStone"] },
-    "trader": { "Icon": null, "Visible": true, "Size": 28, "Color": "#0000ff", "MatchClasses": ["EntityTrader"] }
+    "trader": { "Icon": null, "Visible": true, "Size": 28, "Color": "#0000ff", "MatchClasses": ["EntityTrader", "EntityVillager"] }
 }
