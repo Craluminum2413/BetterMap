@@ -1,5 +1,25 @@
 {
-    "ToggleRadar": "Mostrar/Ocultar 'Mobs Radar",
-    "UpdateRadarConfig": "(Mobs Radar) Actualizar configuración",
-    "game:maplayer-creatures": "Criaturas"
+    "_comentarios": "Traducido por C4BR3R4 || Versión del Mod: 2.1.5 || Fecha de modificación: 20250206 || Registro: http://c4br3r4.es/index.php?topic=1308.0",
+    "ToggleRadar": "Activar o desactivar 'Mobs Radar'",
+    "UpdateRadarConfig": "Mod 'Mobs Radar' ► Actualizar configuración",
+    "game:maplayer-creatures": "Radar",
+
+    "Config.Setting.Add": "Añadir",
+    "Config.Setting.Classes": "Propiedades",
+    "Config.Setting.Color": "Color",
+    "Config.Setting.EnableIcon": "Activar Icono",
+    "Config.Setting.HorizontalRadius": "Radio Horizontal",
+    "Config.Setting.Icon": "Icono",
+    "Config.Setting.MarkerProperties": "Propiedades del Grupo",
+    "Config.Setting.Markers": "Grupos",
+    "Config.Setting.RefreshRate": "Frecuencia de Actualización (ms)",
+    "Config.Setting.Remove": "Eliminar",
+    "Config.Setting.Size": "Tamaño",
+    "Config.Setting.Types": "Tipos",
+    "Config.Setting.VerticalRadius": "Radio Vertical",
+    "Config.Setting.Visible": "Mostrar",
+    "Config.Text.Icon": "Los iconos necesitan la ruta de acceso completa al archivo svg.\nPor ejemplo: 'game:textures/icons/checkmark.svg'.\nEstablecer en 'null' para desactivar.",
+    "Config.Text.Markers": "Los Grupos 'dead' y 'pet' se usar para representar las entidades con estados no identificados.\nPuedes añadir tus propios grupos de entidades.",
+    "Config.Text.RefreshRate": "\nLa Frecuencia de Actualización comprueba la Salud, la Visibilidad y el Radio Horizontal y Vertical.\n(Predeterminado: 1000 | Desactivado: -1)",
+    "Config.Text.SupportsWildcard": "admite comodines y expresiones regulares"
 }
